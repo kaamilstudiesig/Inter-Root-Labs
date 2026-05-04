@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inter-Root Labs</title>
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-[#F9F8F5]/95 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="images/logo-emblem-light.jpeg" alt="Inter-Root Labs emblem" class="w-10 h-10 rounded-full border border-black/10 object-cover" />
+        <span class="text-xl md:text-2xl font-bold tracking-[0.12em]">INTER-ROOT LABS</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm uppercase tracking-[0.14em]">
+        <a href="#services" class="hover:text-[#B8943A] px-3 py-2 rounded-full">Services</a>
+        <a href="#process" class="hover:text-[#B8943A] px-3 py-2 rounded-full">How It Works</a>
+        <a href="#work" class="hover:text-[#B8943A] px-3 py-2 rounded-full">Work</a>
+        <a href="#pricing" class="hover:text-[#B8943A] px-3 py-2 rounded-full">Pricing</a>
+        <a href="#contact" class="hover:text-[#B8943A] px-3 py-2 rounded-full">Contact</a>
+      </nav>
+      <button id="menu-btn" class="md:hidden text-sm uppercase tracking-[0.14em] px-4 py-2 rounded-full border border-black/20 min-h-[44px]">Menu</button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-black/10 bg-[#F9F8F5]">
+      <div class="px-6 py-4 flex flex-col gap-3 text-sm uppercase tracking-[0.14em]">
+        <a href="#services" class="hover:text-[#B8943A] px-3 py-3 rounded-full">Services</a>
+        <a href="#process" class="hover:text-[#B8943A] px-3 py-3 rounded-full">How It Works</a>
+        <a href="#work" class="hover:text-[#B8943A] px-3 py-3 rounded-full">Work</a>
+        <a href="#pricing" class="hover:text-[#B8943A] px-3 py-3 rounded-full">Pricing</a>
+        <a href="#contact" class="hover:text-[#B8943A] px-3 py-3 rounded-full">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <div id="lamp" class="lamp-fixture hidden md:block" aria-hidden="true">
+    <svg viewBox="0 0 160 300" class="w-28 h-52">
+      <g class="lamp-swing">
+        <rect x="60" y="0" width="40" height="12" rx="4" fill="currentColor" />
+        <line x1="80" y1="12" x2="80" y2="150" stroke="currentColor" stroke-width="2" />
+        <path d="M40 150h80l-18 40H58z" fill="currentColor" />
+        <circle cx="80" cy="195" r="16" class="lamp-bulb" />
+        <line x1="80" y1="210" x2="80" y2="260" stroke="currentColor" stroke-width="2" />
+        <line x1="80" y1="260" x2="80" y2="280" stroke="currentColor" stroke-width="2" class="lamp-chain" />
+        <circle cx="80" cy="288" r="6" fill="currentColor" class="lamp-chain" />
+        <rect x="76" y="292" width="8" height="8" rx="2" fill="currentColor" class="lamp-chain" />
+      </g>
+    </svg>
+  </div>
+
+  <button id="theme-toggle" class="theme-toggle md:hidden" aria-label="Toggle dark mode">
+    <span class="theme-icon">☀︎</span>
+  </button>
+
+  <!-- Hero -->
+  <section id="hero" class="relative min-h-screen flex items-center pt-24 overflow-hidden">
+    <canvas id="particle-canvas"></canvas>
+    <div class="relative z-10 max-w-6xl mx-auto px-6 py-20">
+      <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 items-center text-center lg:text-left">
+        <div class="order-2 lg:order-1">
+          <p class="uppercase text-xs tracking-[0.4em] text-black/60 mb-6">Inter-Root Labs Agency</p>
+          <h1 class="text-3xl md:text-5xl lg:text-7xl leading-tight mb-6">We Build Digital Presence For Businesses That Mean Business.</h1>
+          <p class="text-base md:text-lg text-black/70 mb-10">Websites. SEO. Online visibility. Built for gyms, restaurants, and local businesses across India.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="#work" class="px-6 py-3 border border-black/30 uppercase tracking-[0.2em] text-xs text-center rounded-full hover:border-[#B8943A] hover:text-[#B8943A] min-h-[44px]">See Our Work</a>
+            <a href="#contact" class="px-6 py-3 bg-[#B8943A] text-[#0F0F0F] uppercase tracking-[0.2em] text-xs text-center rounded-full hover:opacity-90 min-h-[44px]">Get a Free Demo</a>
+          </div>
+        </div>
+        <div class="order-1 lg:order-2 flex justify-center lg:justify-end">
+          <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full">
+            <img src="images/logo-wordmark.jpeg" alt="Inter-Root Labs wordmark" class="w-full rounded-2xl object-cover bg-white/60" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem Hook -->
+  <section id="problem" class="fade-section">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <div class="section-divider">
+        <span class="diamond"></span>
+      </div>
+      <div class="mt-14 grid md:grid-cols-2 gap-10 items-center">
+        <div class="text-2xl md:text-4xl lg:text-5xl font-semibold leading-tight">87% of customers search online before visiting a local business.</div>
+        <p class="text-base text-black/70">Most local brands still rely on word-of-mouth while their competitors win attention online. We bridge that gap with premium, conversion-first digital presence that earns trust instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="fade-section">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <div class="flex items-center justify-between">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl">Services</h2>
+        <div class="h-px w-20 bg-black/20"></div>
+      </div>
+      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="border border-black/10 p-8 rounded-2xl hover:border-[#B8943A] hover:-translate-y-1 transition">
+          <svg class="w-10 h-10 mb-4" viewBox="0 0 48 48" fill="none" stroke="#0F0F0F" stroke-width="2">
+            <rect x="6" y="10" width="36" height="26" rx="2" />
+            <path d="M6 18h36" />
+          </svg>
+          <h3 class="text-2xl mb-2">Website Design</h3>
+          <p class="text-black/70">Modern, high-trust websites that turn local traffic into booked calls and walk-ins.</p>
+        </div>
+        <div class="border border-black/10 p-8 rounded-2xl hover:border-[#B8943A] hover:-translate-y-1 transition">
+          <svg class="w-10 h-10 mb-4" viewBox="0 0 48 48" fill="none" stroke="#0F0F0F" stroke-width="2">
+            <circle cx="22" cy="22" r="12" />
+            <path d="M34 34l8 8" />
+          </svg>
+          <h3 class="text-2xl mb-2">SEO Optimisation</h3>
+          <p class="text-black/70">On-page and local SEO that helps customers find you before your competitors.</p>
+        </div>
+        <div class="border border-black/10 p-8 rounded-2xl hover:border-[#B8943A] hover:-translate-y-1 transition">
+          <svg class="w-10 h-10 mb-4" viewBox="0 0 48 48" fill="none" stroke="#0F0F0F" stroke-width="2">
+            <rect x="8" y="8" width="32" height="32" rx="6" />
+            <path d="M16 24h16M24 16v16" />
+          </svg>
+          <h3 class="text-2xl mb-2">Google Business Setup</h3>
+          <p class="text-black/70">Optimised profiles, reviews strategy, and map ranking improvements.</p>
+        </div>
+        <div class="border border-black/10 p-8 rounded-2xl hover:border-[#B8943A] hover:-translate-y-1 transition">
+          <svg class="w-10 h-10 mb-4" viewBox="0 0 48 48" fill="none" stroke="#0F0F0F" stroke-width="2">
+            <path d="M8 34c6-8 26-8 32 0" />
+            <circle cx="16" cy="20" r="4" />
+            <circle cx="32" cy="20" r="4" />
+          </svg>
+          <h3 class="text-2xl mb-2">Social Media Presence</h3>
+          <p class="text-black/70">Curated content and posting systems that keep your brand top-of-mind.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="process" class="fade-section">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <div class="flex items-center justify-between">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl">How It Works</h2>
+        <div class="h-px w-20 bg-black/20"></div>
+      </div>
+      <div class="mt-12">
+        <div class="hidden lg:flex items-center justify-between relative">
+          <div class="absolute top-6 left-0 right-0 border-t border-dashed border-black/20"></div>
+          <div class="relative bg-[#F9F8F5] px-4">
+            <p class="text-sm uppercase tracking-[0.2em] text-black/50">01</p>
+            <h3 class="text-2xl mt-2">Free Audit</h3>
+            <p class="text-black/70">We review your online presence.</p>
+          </div>
+          <div class="relative bg-[#F9F8F5] px-4">
+            <p class="text-sm uppercase tracking-[0.2em] text-black/50">02</p>
+            <h3 class="text-2xl mt-2">We Design Your Demo</h3>
+            <p class="text-black/70">Preview the vision before launch.</p>
+          </div>
+          <div class="relative bg-[#F9F8F5] px-4">
+            <p class="text-sm uppercase tracking-[0.2em] text-black/50">03</p>
+            <h3 class="text-2xl mt-2">Launch &amp; Optimise</h3>
+            <p class="text-black/70">Go live and grow steadily.</p>
+          </div>
+        </div>
+        <div class="lg:hidden space-y-8">
+          <div class="border-l border-dashed border-black/20 pl-6">
+            <p class="text-sm uppercase tracking-[0.2em] text-black/50">01</p>
+            <h3 class="text-2xl mt-2">Free Audit</h3>
+            <p class="text-black/70">We review your online presence.</p>
+          </div>
+          <div class="border-l border-dashed border-black/20 pl-6">
+            <p class="text-sm uppercase tracking-[0.2em] text-black/50">02</p>
+            <h3 class="text-2xl mt-2">We Design Your Demo</h3>
+            <p class="text-black/70">Preview the vision before launch.</p>
+          </div>
+          <div class="border-l border-dashed border-black/20 pl-6">
+            <p class="text-sm uppercase tracking-[0.2em] text-black/50">03</p>
+            <h3 class="text-2xl mt-2">Launch &amp; Optimise</h3>
+            <p class="text-black/70">Go live and grow steadily.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work" class="fade-section">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <div class="flex items-center justify-between">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl">Our Work</h2>
+        <div class="h-px w-20 bg-black/20"></div>
+      </div>
+      <div class="mt-12 grid gap-8 lg:grid-cols-3">
+        <div class="rounded-2xl border border-black/10 p-6 text-center">
+          <div class="bg-black/5 rounded-2xl overflow-hidden">
+            <div class="aspect-video">
+              <img src="images/day1-media.png" alt="Day 1 Media website preview" class="w-full h-full object-cover" />
+            </div>
+          </div>
+          <p class="text-sm uppercase tracking-[0.2em] text-black/60 mt-4">Day 1 Media</p>
+          <a href="https://day1-media.com" class="text-xs uppercase tracking-[0.2em] text-black/50 hover:text-[#B8943A] block mt-2">day1-media.com</a>
+        </div>
+      </div>
+      <div class="mt-12 border-l-2 border-[#B8943A] pl-6 rounded-2xl">
+        <p class="text-2xl md:text-3xl italic text-black/80">“Inter-Root made us look like a premium brand overnight — our bookings doubled in six weeks.”</p>
+        <p class="text-sm uppercase tracking-[0.2em] text-black/50 mt-3">Founder, Ironforge Fitness</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="fade-section">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <div class="flex items-center justify-between">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl">Pricing</h2>
+        <div class="h-px w-20 bg-black/20"></div>
+      </div>
+      <div class="mt-12 grid gap-6 lg:grid-cols-3">
+        <div class="border border-black/10 p-8 rounded-2xl">
+          <h3 class="text-2xl">Starter</h3>
+          <p class="text-3xl mt-4">₹999/mo</p>
+          <ul class="mt-6 space-y-2 text-black/70">
+            <li>One-page premium site</li>
+            <li>Basic SEO setup</li>
+            <li>Google Maps integration</li>
+            <li>Mobile-first design</li>
+          </ul>
+          <a href="#contact" class="mt-8 inline-block px-6 py-3 border border-black/30 uppercase tracking-[0.2em] text-xs rounded-full hover:border-[#B8943A] hover:text-[#B8943A] min-h-[44px]">Get Started</a>
+        </div>
+        <div class="border-2 border-[#B8943A] p-8 rounded-2xl relative">
+          <span class="absolute -top-3 left-6 bg-[#B8943A] text-[#0F0F0F] text-xs uppercase tracking-[0.2em] px-3 py-1">Most Popular</span>
+          <h3 class="text-2xl">Growth</h3>
+          <p class="text-3xl mt-4">₹2,999/mo</p>
+          <ul class="mt-6 space-y-2 text-black/70">
+            <li>Multi-page website</li>
+            <li>Full SEO optimisation</li>
+            <li>Review generation kit</li>
+            <li>Social media starter pack</li>
+            <li>Monthly performance report</li>
+          </ul>
+          <a href="#contact" class="mt-8 inline-block px-6 py-3 bg-[#B8943A] text-[#0F0F0F] uppercase tracking-[0.2em] text-xs rounded-full hover:opacity-90 min-h-[44px]">Get Started</a>
+        </div>
+        <div class="border border-black/10 p-8 rounded-2xl">
+          <h3 class="text-2xl">Pro</h3>
+          <p class="text-3xl mt-4">₹9,999/mo</p>
+          <ul class="mt-6 space-y-2 text-black/70">
+            <li>Custom brand system</li>
+            <li>Advanced SEO + ads</li>
+            <li>Content production</li>
+            <li>Dedicated strategist</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="#contact" class="mt-8 inline-block px-6 py-3 border border-black/30 uppercase tracking-[0.2em] text-xs rounded-full hover:border-[#B8943A] hover:text-[#B8943A] min-h-[44px]">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="fade-section">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <div class="flex items-center justify-between">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl">Let's Build Something</h2>
+        <div class="h-px w-20 bg-black/20"></div>
+      </div>
+      <div class="mt-12 grid md:grid-cols-2 gap-12">
+        <div>
+          <p class="text-black/70">Tell us about your business. We will craft a demo tailored to your market, customers, and growth targets.</p>
+          <div class="mt-6 border border-black/10 rounded-2xl p-6">
+            <p class="text-sm uppercase tracking-[0.2em] text-black/60">Direct Line</p>
+            <p class="text-sm text-black/60 mt-2">We reply within 24 hours.</p>
+          </div>
+        </div>
+        <form id="lead-form" class="space-y-6" action="https://formsubmit.co/588305551bca642219841bfcd3407853" method="post">
+          <input type="hidden" name="_subject" value="New Inter-Root Labs Inquiry" />
+          <input type="hidden" name="_captcha" value="false" />
+          <div>
+            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Name</label>
+            <input type="text" name="name" class="input-underline" />
+            <p class="error-text hidden"></p>
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Business Name</label>
+            <input type="text" name="business" class="input-underline" />
+            <p class="error-text hidden"></p>
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Business Type</label>
+            <select name="type" class="input-underline">
+              <option value="">Select</option>
+              <option>Gym</option>
+              <option>Restaurant</option>
+              <option>Salon</option>
+              <option>Clinic</option>
+              <option>Other</option>
+            </select>
+            <p class="error-text hidden"></p>
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Phone Number</label>
+            <input type="tel" name="phone" class="input-underline" />
+            <p class="error-text hidden"></p>
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Message</label>
+            <textarea name="message" rows="3" class="input-underline"></textarea>
+            <p class="error-text hidden"></p>
+          </div>
+          <button type="submit" class="w-full px-6 py-3 bg-[#B8943A] text-[#0F0F0F] uppercase tracking-[0.2em] text-xs rounded-full hover:opacity-90 min-h-[44px]">Send Inquiry</button>
+          <p id="form-success" class="text-sm text-black/70 hidden">Thank you. We will reach out within 24 hours.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="fade-section">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="section-divider">
+        <span class="diamond"></span>
+      </div>
+      <div class="mt-10 grid gap-8 md:grid-cols-3 items-center text-sm uppercase tracking-[0.2em] text-center md:text-left">
+        <div class="flex items-center justify-center md:justify-start gap-3">
+          <img src="images/logo-emblem-light.jpeg" alt="Inter-Root Labs emblem" class="w-10 h-10 rounded-full border border-black/10 object-cover" />
+          <span>Inter-Root Labs</span>
+        </div>
+        <div class="flex items-center justify-center gap-6">
+          <a href="#services" class="hover:text-[#B8943A]">Services</a>
+          <a href="#process" class="hover:text-[#B8943A]">Working</a>
+          <a href="#pricing" class="hover:text-[#B8943A]">Pricing</a>
+        </div>
+        <div class="flex items-center justify-center md:justify-end">Rooted in craft. Built for growth.</div>
+      </div>
+      <div class="mt-8 text-xs uppercase tracking-[0.2em] text-black/50 text-center md:text-left">© 2026 Inter-Root Labs. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Mobile Floating Button -->
+  <a href="#contact" class="md:hidden fixed bottom-6 right-6 bg-[#F9F8F5]/70 border border-[#B8943A] text-[#0F0F0F] px-5 py-3 rounded-full uppercase tracking-[0.2em] text-xs shadow-lg min-h-[44px] backdrop-blur-md">Get a Free Demo</a>
+
+  <script src="script.js"></script>
+</body>
+</html>
