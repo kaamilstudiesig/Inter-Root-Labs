@@ -17,7 +17,7 @@ html {
 body {
   background: var(--off-white);
   color: var(--near-black);
-  font-family: "Inter", sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
