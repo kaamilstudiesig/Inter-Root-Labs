@@ -348,7 +348,97 @@
   </footer>
 
   <!-- Mobile Floating Button -->
-  
+  <!-- Back To Top Button -->
+<button id="backToTop" aria-label="Back to Top">
+  <span></span>
+</button>
+
+<style>
+  #backToTop {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+
+    width: 52px;
+    height: 52px;
+
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #000;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+
+    transition: all 0.3s ease;
+
+    z-index: 9999;
+
+    /* Gold Shadow */
+    box-shadow:
+      0 0 10px rgba(255, 215, 0, 0.45),
+      0 0 20px rgba(255, 215, 0, 0.25);
+  }
+
+  #backToTop.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  #backToTop:hover {
+    transform: translateY(-4px) scale(1.05);
+
+    box-shadow:
+      0 0 14px rgba(255, 215, 0, 0.7),
+      0 0 28px rgba(255, 215, 0, 0.45);
+  }
+
+  /* Centered Minimal Gold Arrow */
+  #backToTop span {
+    width: 12px;
+    height: 12px;
+
+    border-top: 2.5px solid gold;
+    border-left: 2.5px solid gold;
+
+    transform: rotate(45deg);
+
+    margin-top: 4px;
+  }
+
+  /* Dark Mode */
+  @media (prefers-color-scheme: dark) {
+    #backToTop {
+      background: #fff;
+    }
+  }
+</style>
+
+<script>
+  const backToTop = document.getElementById("backToTop");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      backToTop.classList.add("show");
+    } else {
+      backToTop.classList.remove("show");
+    }
+  });
+
+  backToTop.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+</script>
   <script src="script.js"></script>
 </body>
 </html>
