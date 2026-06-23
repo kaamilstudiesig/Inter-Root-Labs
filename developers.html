@@ -122,7 +122,8 @@
     <div id="page-transition"></div>
 
     <!-- LOADER -->
-    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-8">
+    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-6">
+        <img src="images/logo-emblem-dark.jpeg" class="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover opacity-0" id="loader-emblem" alt="Inter-Root Labs Emblem" />
         <div class="relative z-20">
             <div id="loader-logo-wrap" class="overflow-hidden">
                 <span id="loader-logo" class="font-bebas text-5xl md:text-7xl tracking-[0.2em] text-brand-white translate-y-[100%] block">INTER-ROOT LABS</span>
@@ -144,12 +145,12 @@
                 <nav id="navbar" x-data="{ open: false }" class="fixed top-0 w-full flex items-center justify-between px-6 py-5 md:px-12 z-50 text-sm uppercase tracking-widest font-inter text-brand-grey3 transition-colors duration-300">
                     <div class="flex items-center gap-4 cursor-pointer" data-cursor="hover">
                         <a href="index.html" class="flex items-center gap-3 hover:text-brand-white transition-colors">
-                            <img src="images/logo-emblem-light.jpeg" class="w-8 h-8 rounded-full object-cover mix-blend-screen" alt="Logo">
-                            <span class="font-bebas font-normal text-[18px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
+                            <img src="images/logo-emblem-dark.jpeg" class="w-9 h-9 rounded-full object-cover" alt="Logo">
+                            <span class="font-bebas font-normal text-[20px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
                         </a>
                     </div>
                     
-                    <div class="hidden md:flex items-center gap-8 font-medium text-[11px]">
+                    <div class="hidden md:flex items-center gap-10 font-medium text-[13px]">
                         <a href="developers.html" class="text-brand-violet transition-colors duration-300" data-cursor="hover-violet">DEVELOPERS</a>
                         <a href="studio.html" class="hover:text-brand-lime transition-colors duration-300" data-cursor="hover">STUDIO</a>
                         <a href="index.html#about" class="hover:text-brand-white transition-colors duration-300" data-cursor="hover">ABOUT</a>
@@ -173,8 +174,8 @@
                 <section class="min-h-screen w-full relative flex flex-col items-center justify-center overflow-hidden bg-brand-black pt-20">
                     <div class="blob"></div>
                     <div class="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
-                        <h1 class="hero-title font-bebas text-[12vw] md:text-[9rem] leading-[0.85] uppercase tracking-tight text-brand-white" data-splitting>WE BUILD THINGS<br>THAT WORK.</h1>
-                        <p id="hero-sub" class="font-inter text-brand-grey3 text-lg md:text-2xl mt-8 max-w-2xl mx-auto font-light opacity-0">Full-stack development for businesses that refuse to be average.</p>
+                        <h1 class="hero-title font-bebas text-[12vw] md:text-[9rem] leading-[0.85] uppercase tracking-tight text-brand-white" data-splitting>WE BUILD SOFTWARE<br>THAT MATTERS.</h1>
+                        <p id="hero-sub" class="font-inter text-brand-grey3 text-lg md:text-2xl mt-8 max-w-2xl mx-auto font-light opacity-0">Software development for businesses that refuse to be average.</p>
                         <div class="mt-12 opacity-0" id="hero-cta">
                             <a href="index.html#contact" class="border border-brand-white/30 px-10 py-5 rounded-full font-bebas text-2xl tracking-widest text-brand-white hover:bg-brand-white hover:text-brand-black transition-colors duration-300 inline-block" data-cursor="hover">
                                 START PROJECT
@@ -190,42 +191,59 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px]">
                             <!-- Web Apps (Large) -->
-                            <div class="bento-card col-span-1 md:col-span-2 row-span-2 p-10 flex flex-col justify-end relative overflow-hidden group cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_web.webp'); background-size: cover; background-position: center;">
-                                <div class="absolute top-8 right-8 text-brand-violet-light opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-2 p-10 flex flex-col justify-between relative overflow-hidden group cursor-pointer" data-cursor="hover-violet">
+                                <div class="flex justify-between items-start">
+                                    <svg class="w-10 h-10 text-brand-violet opacity-60 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                                 </div>
-                                <h3 class="font-bebas text-4xl md:text-5xl text-brand-white mb-4 relative z-10">WEB APPLICATIONS</h3>
-                                <p class="font-inter text-brand-grey3 text-lg max-w-md relative z-10">High-performance, scalable web platforms built with modern React ecosystems. From SaaS products to enterprise portals.</p>
+                                <div>
+                                    <h3 class="font-bebas text-4xl md:text-5xl text-brand-white mb-4 relative z-10">WEB APPLICATIONS</h3>
+                                    <p class="font-inter text-brand-grey3 text-lg max-w-md relative z-10">High-performance, scalable web platforms built with modern React ecosystems. From SaaS products to enterprise portals.</p>
+                                </div>
                             </div>
                             
                             <!-- API -->
-                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_api.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">API INTEGRATIONS</h3>
-                                <p class="font-inter text-brand-grey3 text-sm relative z-10">Connecting fragmented systems into seamless workflows.</p>
+                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-between cursor-pointer" data-cursor="hover-violet">
+                                <svg class="w-8 h-8 text-brand-violet opacity-60 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">API INTEGRATIONS</h3>
+                                    <p class="font-inter text-brand-grey3 text-sm relative z-10">Connecting fragmented systems into seamless workflows.</p>
+                                </div>
                             </div>
 
                             <!-- E-commerce -->
-                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_ecommerce.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">E-COMMERCE</h3>
-                                <p class="font-inter text-brand-grey3 text-sm relative z-10">Headless commerce builds optimized for conversion and speed.</p>
+                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-between cursor-pointer" data-cursor="hover-violet">
+                                <svg class="w-8 h-8 text-brand-violet opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">E-COMMERCE</h3>
+                                    <p class="font-inter text-brand-grey3 text-sm relative z-10">Headless commerce builds optimized for conversion and speed.</p>
+                                </div>
                             </div>
 
                             <!-- Mobile Apps -->
-                            <div class="bento-card col-span-1 md:col-span-1 row-span-2 p-10 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_mobile.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-4xl text-brand-white mb-4 relative z-10">MOBILE APPS</h3>
-                                <p class="font-inter text-brand-grey3 relative z-10">Native-feeling iOS and Android applications built efficiently.</p>
+                            <div class="bento-card col-span-1 md:col-span-1 row-span-2 p-10 flex flex-col justify-between cursor-pointer" data-cursor="hover-violet">
+                                <svg class="w-10 h-10 text-brand-violet opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-4xl text-brand-white mb-4 relative z-10">MOBILE APPS</h3>
+                                    <p class="font-inter text-brand-grey3 relative z-10">Native-feeling iOS and Android applications built efficiently.</p>
+                                </div>
                             </div>
 
                             <!-- QR Ordering -->
-                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_qr.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">QR ORDERING SYSTEMS</h3>
-                                <p class="font-inter text-brand-grey3 relative z-10">Contactless, real-time dining solutions for modern hospitality.</p>
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-between cursor-pointer" data-cursor="hover-violet">
+                                <svg class="w-8 h-8 text-brand-violet opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="14" y1="21" x2="21" y2="21"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">QR ORDERING SYSTEMS</h3>
+                                    <p class="font-inter text-brand-grey3 relative z-10">Contactless, real-time dining solutions for modern hospitality.</p>
+                                </div>
                             </div>
 
                             <!-- Custom Dashboards -->
-                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_dashboards.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">CUSTOM DASHBOARDS</h3>
-                                <p class="font-inter text-brand-grey3 relative z-10">Internal tools that turn complex data into actionable insights.</p>
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-between cursor-pointer" data-cursor="hover-violet">
+                                <svg class="w-8 h-8 text-brand-violet opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">CUSTOM DASHBOARDS</h3>
+                                    <p class="font-inter text-brand-grey3 relative z-10">Internal tools that turn complex data into actionable insights.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -501,7 +519,8 @@
             });
             document.body.style.overflow = 'hidden';
 
-            tl.to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" })
+            tl.to("#loader-emblem", { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" })
+              .to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" }, "-=0.3")
               .to("#loader", { opacity: 0, duration: 0.8, ease: "power4.out" })
               .from(".hero-title .char", { y: 100, opacity: 0, stagger: 0.02, duration: 1, ease: "power4.out" }, "-=0.6")
               .to("#hero-sub", { opacity: 1, y: 0, duration: 1 }, "+=0.2")
@@ -517,11 +536,11 @@
                 });
             });
 
-            // Tech Stack Scramble
-            gsap.utils.toArray('.tech-item').forEach(item => {
-                ScrollTrigger.create({
-                    trigger: item, start: "top 90%",
-                    onEnter: () => scrambleText(item, item.getAttribute('data-text'), 1200)
+            // Tech Stack — clean fade-in stagger (replaces scramble)
+            gsap.utils.toArray('.tech-item').forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: { trigger: item, start: "top 90%" },
+                    opacity: 0, y: 20, duration: 0.6, delay: i * 0.06, ease: "power3.out"
                 });
             });
 

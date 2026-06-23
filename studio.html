@@ -133,7 +133,8 @@
     <div id="page-transition"></div>
 
     <!-- LOADER -->
-    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-8">
+    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-6">
+        <img src="images/logo-emblem-dark.jpeg" class="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover opacity-0" id="loader-emblem" alt="Inter-Root Labs Emblem" />
         <div class="relative z-20">
             <div id="loader-logo-wrap" class="overflow-hidden">
                 <span id="loader-logo" class="font-bebas text-5xl md:text-7xl tracking-[0.2em] text-brand-white translate-y-[100%] block">INTER-ROOT LABS</span>
@@ -155,12 +156,12 @@
                 <nav id="navbar" x-data="{ open: false }" class="fixed top-0 w-full flex items-center justify-between px-6 py-5 md:px-12 z-50 text-sm uppercase tracking-widest font-inter text-brand-grey3 transition-colors duration-300">
                     <div class="flex items-center gap-4 cursor-pointer" data-cursor="hover">
                         <a href="index.html" class="flex items-center gap-3 hover:text-brand-white transition-colors">
-                            <img src="images/logo-emblem-light.jpeg" class="w-8 h-8 rounded-full object-cover mix-blend-screen" alt="Logo">
-                            <span class="font-bebas font-normal text-[18px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
+                            <img src="images/logo-emblem-dark.jpeg" class="w-9 h-9 rounded-full object-cover" alt="Logo">
+                            <span class="font-bebas font-normal text-[20px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
                         </a>
                     </div>
                     
-                    <div class="hidden md:flex items-center gap-8 font-medium text-[11px]">
+                    <div class="hidden md:flex items-center gap-10 font-medium text-[13px]">
                         <a href="developers.html" class="hover:text-brand-violet transition-colors duration-300" data-cursor="hover-violet">DEVELOPERS</a>
                         <a href="studio.html" class="text-brand-lime transition-colors duration-300" data-cursor="hover-lime">STUDIO</a>
                         <a href="index.html#about" class="hover:text-brand-white transition-colors duration-300" data-cursor="hover">ABOUT</a>
@@ -225,39 +226,57 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px]">
                             <!-- Brand Films -->
-                            <div class="bento-card col-span-1 md:col-span-2 row-span-2 p-10 flex flex-col justify-end relative overflow-hidden cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_film.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-4xl md:text-5xl text-brand-white mb-4 relative z-10">BRAND FILMS</h3>
-                                <p class="font-inter text-brand-grey3 text-lg max-w-md relative z-10">Cinematic storytelling that captures the essence of your business and builds emotional connection with your audience.</p>
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-2 p-10 flex flex-col justify-between relative overflow-hidden cursor-pointer" data-cursor="hover-lime">
+                                <svg class="w-10 h-10 text-brand-lime opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-4xl md:text-5xl text-brand-white mb-4 relative z-10">BRAND FILMS</h3>
+                                    <p class="font-inter text-brand-grey3 text-lg max-w-md relative z-10">Cinematic storytelling that captures the essence of your business and builds emotional connection with your audience.</p>
+                                </div>
                             </div>
                             
                             <!-- Reels -->
-                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_reels.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">REELS & SHORT FORM</h3>
-                                <p class="font-inter text-brand-grey3 text-sm relative z-10">High-retention vertical video engineered for algorithmic reach.</p>
+                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-between cursor-pointer" data-cursor="hover-lime">
+                                <svg class="w-8 h-8 text-brand-lime opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">REELS & SHORT FORM</h3>
+                                    <p class="font-inter text-brand-grey3 text-sm relative z-10">High-retention vertical video engineered for algorithmic reach.</p>
+                                </div>
                             </div>
 
                             <!-- Social Media -->
-                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_social.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">SOCIAL MANAGEMENT</h3>
-                                <p class="font-inter text-brand-grey3 text-sm relative z-10">End-to-end publishing, community engagement, and growth tactics.</p>
+                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-between cursor-pointer" data-cursor="hover-lime">
+                                <svg class="w-8 h-8 text-brand-lime opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 2h4v4M3 22l18-18M15 22h4v-4M3 2l18 18"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">SOCIAL MANAGEMENT</h3>
+                                    <p class="font-inter text-brand-grey3 text-sm relative z-10">End-to-end publishing, community engagement, and growth tactics.</p>
+                                </div>
                             </div>
 
                             <!-- Campaign -->
-                            <div class="bento-card col-span-1 md:col-span-1 row-span-2 p-10 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_campaign.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-4xl text-brand-white mb-4 relative z-10">CAMPAIGN PRODUCTION</h3>
-                                <p class="font-inter text-brand-grey3 relative z-10">Full-scale ad creatives for paid acquisition channels.</p>
+                            <div class="bento-card col-span-1 md:col-span-1 row-span-2 p-10 flex flex-col justify-between cursor-pointer" data-cursor="hover-lime">
+                                <svg class="w-10 h-10 text-brand-lime opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-4xl text-brand-white mb-4 relative z-10">CAMPAIGN PRODUCTION</h3>
+                                    <p class="font-inter text-brand-grey3 relative z-10">Full-scale ad creatives for paid acquisition channels.</p>
+                                </div>
                             </div>
 
                             <!-- Graphic Design -->
-                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_graphic.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">GRAPHIC DESIGN</h3>
-                                <p class="font-inter text-brand-grey3 relative z-10">Thumb-stopping visual assets, carousels, and digital collateral.</p>
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-between cursor-pointer" data-cursor="hover-lime">
+                                <svg class="w-8 h-8 text-brand-lime opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">GRAPHIC DESIGN</h3>
+                                    <p class="font-inter text-brand-grey3 relative z-10">Thumb-stopping visual assets, carousels, and digital collateral.</p>
+                                </div>
                             </div>
 
                             <!-- Content Strategy -->
-                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_strategy.webp'); background-size: cover; background-position: center;">
-                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">CONTENT STRATEGY</h3>
-                                <p class="font-inter text-brand-grey3 relative z-10">Data-driven roadmaps to position your brand as an industry authority.</p>
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-between cursor-pointer" data-cursor="hover-lime">
+                                <svg class="w-8 h-8 text-brand-lime opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                <div>
+                                    <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">CONTENT STRATEGY</h3>
+                                    <p class="font-inter text-brand-grey3 relative z-10">Data-driven roadmaps to position your brand as an industry authority.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -487,7 +506,8 @@
             });
             document.body.style.overflow = 'hidden';
 
-            tl.to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" })
+            tl.to("#loader-emblem", { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" })
+              .to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" }, "-=0.3")
               .to("#loader", { opacity: 0, duration: 0.8, ease: "power4.out" })
               .from(".hero-title .char", { y: 100, opacity: 0, stagger: 0.02, duration: 1, ease: "power4.out" }, "-=0.6")
               .to("#hero-sub", { opacity: 1, y: 0, duration: 1 }, "+=0.2")

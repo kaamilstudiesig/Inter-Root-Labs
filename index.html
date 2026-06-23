@@ -221,7 +221,6 @@
             width: 100%;
         }
 
-        /* Page Transition Overlay */
         #page-transition {
             position: fixed;
             inset: 0;
@@ -229,6 +228,12 @@
             z-index: 99999;
             pointer-events: none;
             clip-path: circle(0% at 50% 50%);
+        }
+
+        /* Submit button dynamic hover */
+        #submit-btn:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--hover-border);
         }
 
         a { color: inherit; }
@@ -241,7 +246,9 @@
     <div id="page-transition"></div>
 
     <!-- LOADER -->
-    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-8">
+    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-6">
+        <!-- Logo Emblem -->
+        <img src="images/logo-emblem-dark.jpeg" class="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover opacity-0" id="loader-emblem" alt="Inter-Root Labs Emblem" />
         <!-- Logo Text -->
         <div class="relative z-20">
             <div id="loader-logo-wrap" class="overflow-hidden">
@@ -265,12 +272,12 @@
                 <nav id="navbar" x-data="{ open: false }" class="fixed top-0 w-full flex items-center justify-between px-6 py-5 md:px-12 z-50 text-sm uppercase tracking-widest font-inter text-brand-grey3 transition-colors duration-300">
                     <!-- Left -->
                     <div class="flex items-center gap-4 cursor-pointer" data-cursor="hover" onclick="window.scrollTo(0,0)">
-                        <img src="images/logo-emblem-light.jpeg" class="w-8 h-8 rounded-full object-cover mix-blend-screen" alt="Logo">
-                        <span class="font-bebas font-normal text-[18px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
+                        <img src="images/logo-emblem-dark.jpeg" class="w-9 h-9 rounded-full object-cover" alt="Logo">
+                        <span class="font-bebas font-normal text-[20px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
                     </div>
                     
                     <!-- Right -->
-                    <div class="hidden md:flex items-center gap-8 font-medium text-[11px]">
+                    <div class="hidden md:flex items-center gap-10 font-medium text-[13px]">
                         <a href="developers.html" class="hover:text-brand-violet hover:scale-110 transition-all duration-300" data-cursor="hover-violet">DEVELOPERS</a>
                         <a href="studio.html" class="hover:text-brand-lime hover:scale-110 transition-all duration-300" data-cursor="hover-lime">STUDIO</a>
                         <a href="#about" class="hover:text-brand-white hover:scale-110 transition-all duration-300" data-cursor="hover">ABOUT</a>
@@ -317,7 +324,7 @@
                 <!-- MARQUEE -->
                 <section class="py-6 border-y border-brand-grey4/30 bg-brand-grey1 relative overflow-hidden flex flex-col gap-2">
                     <!-- Top Row -->
-                    <div class="marquee-container" data-speed="0.25">
+                    <div class="marquee-container" data-speed="0.08">
                         <div class="marquee-track font-bebas text-3xl md:text-4xl tracking-[0.1em] uppercase">
                             <span class="mx-6 text-brand-white">GOLDKRAFT</span><span class="mx-6 text-brand-grey4">•</span>
                             <span class="mx-6 text-[#555]">AARAMBHA CLINIC</span><span class="mx-6 text-brand-grey4">•</span>
@@ -333,7 +340,7 @@
                         </div>
                     </div>
                     <!-- Bottom Row (Reverse) -->
-                    <div class="marquee-container" data-speed="-0.35">
+                    <div class="marquee-container" data-speed="-0.1">
                         <div class="marquee-track font-bebas text-3xl md:text-4xl tracking-[0.1em] uppercase">
                             <span class="mx-6 text-[#555]">GOLDKRAFT</span><span class="mx-6 text-brand-grey4">•</span>
                             <span class="mx-6 text-brand-white">AARAMBHA CLINIC</span><span class="mx-6 text-brand-grey4">•</span>
@@ -353,17 +360,19 @@
                 <!-- ABOUT -->
                 <section id="about" class="py-32 md:py-48 px-6 md:px-12 relative overflow-hidden bg-brand-black">
                     <!-- Watermark -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none opacity-[0.03] select-none flex items-center justify-center">
+                    <div class="about-watermark absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none opacity-0 select-none flex items-center justify-center">
                         <span class="font-bebas text-[30vw] leading-none whitespace-nowrap">ABOUT US</span>
                     </div>
 
-                    <div class="max-w-[1000px] mx-auto relative z-10 flex border-l border-brand-violet pl-8 md:pl-16">
+                    <!-- Accent line that grows on scroll -->
+                    <div class="max-w-[1000px] mx-auto relative z-10 flex">
+                        <div class="about-accent-line w-[2px] bg-brand-violet mr-8 md:mr-16 flex-shrink-0" style="height: 0; opacity: 0;"></div>
                         <div class="font-inter font-light text-2xl md:text-4xl lg:text-5xl text-brand-white leading-[1.4] tracking-tight about-text-container">
-                            <div class="about-line-text">We combine full-stack development</div>
-                            <div class="about-line-text text-brand-grey3">and professional media production</div>
-                            <div class="about-line-text">into one seamless ecosystem,</div>
-                            <div class="about-line-text">so your brand looks, speaks, and</div>
-                            <div class="about-line-text text-brand-grey3">performs exactly as it should.</div>
+                            <div class="about-line-text" style="opacity:0; transform: translateY(40px) translateX(-20px);">We combine full-stack development</div>
+                            <div class="about-line-text text-brand-grey3" style="opacity:0; transform: translateY(40px) translateX(-20px);">and professional media production</div>
+                            <div class="about-line-text" style="opacity:0; transform: translateY(40px) translateX(-20px);">into one seamless ecosystem,</div>
+                            <div class="about-line-text" style="opacity:0; transform: translateY(40px) translateX(-20px);">so your brand looks, speaks, and</div>
+                            <div class="about-line-text text-brand-grey3" style="opacity:0; transform: translateY(40px) translateX(-20px);">performs exactly as it should.</div>
                         </div>
                     </div>
                 </section>
@@ -526,22 +535,22 @@
                         </div>
                         
                         <div class="w-full md:w-1/2 pt-4">
-                            <form class="flex flex-col gap-10" onsubmit="event.preventDefault();">
+                            <form id="contact-form" class="flex flex-col gap-10" onsubmit="event.preventDefault();">
                                 
                                 <!-- Service Selector -->
                                 <div class="flex flex-col gap-4 mb-4">
                                     <label class="font-bebas text-sm text-[#555555] tracking-[0.1em]">I NEED HELP WITH:</label>
                                     <div class="flex flex-wrap gap-4">
                                         <label class="cursor-pointer group relative">
-                                            <input type="radio" name="service" class="peer sr-only" checked>
+                                            <input type="radio" name="service" value="development" class="peer sr-only service-radio" checked>
                                             <div class="px-6 py-3 border border-[#cccccc] text-[#555555] font-inter text-sm transition-all peer-checked:border-brand-violet peer-checked:text-brand-violet peer-checked:bg-brand-violet/10 hover:border-[#888]">Development</div>
                                         </label>
                                         <label class="cursor-pointer group relative">
-                                            <input type="radio" name="service" class="peer sr-only">
+                                            <input type="radio" name="service" value="studio" class="peer sr-only service-radio">
                                             <div class="px-6 py-3 border border-[#cccccc] text-[#555555] font-inter text-sm transition-all peer-checked:border-brand-lime peer-checked:text-[#000] peer-checked:bg-brand-lime/30 hover:border-[#888]">Studio</div>
                                         </label>
                                         <label class="cursor-pointer group relative">
-                                            <input type="radio" name="service" class="peer sr-only">
+                                            <input type="radio" name="service" value="both" class="peer sr-only service-radio">
                                             <div class="px-6 py-3 border border-[#cccccc] text-[#555555] font-inter text-sm transition-all peer-checked:border-brand-black peer-checked:text-brand-white peer-checked:bg-brand-black hover:border-[#888]">Both</div>
                                         </label>
                                     </div>
@@ -565,7 +574,7 @@
                                     <div class="input-underline"></div>
                                 </div>
 
-                                <button type="submit" class="w-full bg-brand-black text-brand-white border border-brand-black rounded-sm font-bebas text-2xl tracking-widest py-6 mt-4 hover:bg-brand-violet hover:border-brand-violet transition-colors duration-400 group overflow-hidden relative" data-cursor="hover">
+                                <button id="submit-btn" type="submit" class="w-full bg-brand-black text-brand-white border border-brand-black rounded-sm font-bebas text-2xl tracking-widest py-6 mt-4 transition-colors duration-400 group overflow-hidden relative" data-cursor="hover" style="--hover-bg: #86BBD8; --hover-border: #86BBD8;">
                                     <span class="relative z-10 block transition-transform duration-300 group-hover:-translate-y-[150%]">SUBMIT INQUIRY</span>
                                     <span class="absolute inset-0 z-10 flex items-center justify-center translate-y-[150%] transition-transform duration-300 group-hover:translate-y-0 text-brand-white">SUBMIT INQUIRY</span>
                                 </button>
@@ -772,7 +781,8 @@
             // Prevent scrolling during load
             document.body.style.overflow = 'hidden';
 
-            tl.to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" })
+            tl.to("#loader-emblem", { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" })
+              .to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" }, "-=0.3")
               .to("#loader", { opacity: 0, duration: 0.8, ease: "power4.out" })
               
               // Hero Reveal
@@ -828,18 +838,27 @@
                 });
             });
 
-            // About Reveal
-            gsap.from(".about-line-text", {
-                scrollTrigger: {
-                    trigger: "#about",
-                    start: "top 60%",
-                },
-                y: 30,
-                autoAlpha: 0,
-                duration: 1,
-                stagger: 0.15,
-                ease: "power4.out"
-            });
+            // About Section — enhanced scroll animation
+            const aboutSection = document.getElementById('about');
+            if (aboutSection) {
+                // Watermark fade
+                gsap.to('.about-watermark', {
+                    scrollTrigger: { trigger: '#about', start: 'top 70%', end: 'bottom 30%', scrub: 1 },
+                    opacity: 0.03, scale: 1, ease: 'none'
+                });
+
+                // Accent line grows
+                gsap.to('.about-accent-line', {
+                    scrollTrigger: { trigger: '#about', start: 'top 60%' },
+                    height: '100%', opacity: 1, duration: 1.2, ease: 'power3.out'
+                });
+
+                // Text lines stagger in
+                gsap.to('.about-line-text', {
+                    scrollTrigger: { trigger: '#about', start: 'top 60%' },
+                    opacity: 1, y: 0, x: 0, duration: 0.9, stagger: 0.18, ease: 'power4.out'
+                });
+            }
 
             // Process Scramble & Reveal
             gsap.utils.toArray('.workflow-card').forEach((card, i) => {
@@ -871,6 +890,27 @@
                     ease: "power3.out"
                 });
             });
+
+            // --- Service Radio → Submit Button Color ---
+            const submitBtn = document.getElementById('submit-btn');
+            const serviceRadios = document.querySelectorAll('.service-radio');
+            if (submitBtn && serviceRadios.length) {
+                serviceRadios.forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        const val = radio.value;
+                        if (val === 'studio') {
+                            submitBtn.style.setProperty('--hover-bg', '#C8FF00');
+                            submitBtn.style.setProperty('--hover-border', '#C8FF00');
+                        } else if (val === 'both') {
+                            submitBtn.style.setProperty('--hover-bg', '#F5F5F3');
+                            submitBtn.style.setProperty('--hover-border', '#F5F5F3');
+                        } else {
+                            submitBtn.style.setProperty('--hover-bg', '#86BBD8');
+                            submitBtn.style.setProperty('--hover-border', '#86BBD8');
+                        }
+                    });
+                });
+            }
 
         });
     </script>

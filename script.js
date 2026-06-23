@@ -1,3 +1,5 @@
+// script.js — Legacy form & UI logic (with defensive null checks)
+
 const navbar = document.getElementById("navbar");
 const menuBtn = document.getElementById("menu-btn");
 const mobileMenu = document.getElementById("mobile-menu");
@@ -9,24 +11,30 @@ const lampBulb = lamp?.querySelector(".lamp-bulb");
 const themeToggle = document.getElementById("theme-toggle");
 const themeIcon = themeToggle?.querySelector(".theme-icon");
 
-menuBtn.addEventListener("click", () => {
-  mobileMenu.classList.toggle("hidden");
+// Mobile menu toggle
+menuBtn?.addEventListener("click", () => {
+  mobileMenu?.classList.toggle("hidden");
 });
 
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 10) {
-    navbar.classList.add("nav-border");
-  } else {
-    navbar.classList.remove("nav-border");
-  }
-});
+// Navbar scroll border
+if (navbar) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 10) {
+      navbar.classList.add("nav-border");
+    } else {
+      navbar.classList.remove("nav-border");
+    }
+  });
+}
 
+// Close mobile menu on link click
 document.querySelectorAll("#mobile-menu a").forEach((link) => {
   link.addEventListener("click", () => {
-    mobileMenu.classList.add("hidden");
+    mobileMenu?.classList.add("hidden");
   });
 });
 
+// Intersection Observer for fade sections
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -43,8 +51,11 @@ document.querySelectorAll(".fade-section").forEach((section) => {
   observer.observe(section);
 });
 
+// Form validation
 const validateField = (field, message) => {
-  const error = field.parentElement.querySelector(".error-text");
+  if (!field) return true;
+  const error = field.parentElement?.querySelector(".error-text");
+  if (!error) return true;
   if (!field.value.trim()) {
     error.textContent = message;
     error.classList.remove("hidden");
@@ -55,7 +66,9 @@ const validateField = (field, message) => {
 };
 
 const validatePhone = (field) => {
-  const error = field.parentElement.querySelector(".error-text");
+  if (!field) return true;
+  const error = field.parentElement?.querySelector(".error-text");
+  if (!error) return true;
   const cleaned = field.value.replace(/\D/g, "");
   if (cleaned.length < 10) {
     error.textContent = "Enter a valid phone number.";
@@ -66,8 +79,8 @@ const validatePhone = (field) => {
   return true;
 };
 
-form.addEventListener("submit", (event) => {
-  successMessage.classList.add("hidden");
+form?.addEventListener("submit", (event) => {
+  successMessage?.classList.add("hidden");
   const nameValid = validateField(form.elements.name, "Please enter your name.");
   const businessValid = validateField(form.elements.business, "Please enter your business name.");
   const typeValid = validateField(form.elements.type, "Please select a business type.");
@@ -79,9 +92,10 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  successMessage.classList.remove("hidden");
+  successMessage?.classList.remove("hidden");
 });
 
+// Click sound
 const playClickSound = () => {
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   if (!AudioCtx) return;
@@ -98,6 +112,7 @@ const playClickSound = () => {
   osc.stop(ctx.currentTime + 0.09);
 };
 
+// Theme
 const setThemeIcon = () => {
   if (!themeIcon) return;
   const isDark = document.documentElement.classList.contains("dark");
@@ -137,37 +152,40 @@ themeToggle?.addEventListener("click", () => {
 
 setThemeIcon();
 
+// Particle canvas (only if element exists)
 const canvas = document.getElementById("particle-canvas");
-const ctx = canvas.getContext("2d");
-let particles = [];
+if (canvas) {
+  const ctx = canvas.getContext("2d");
+  let particles = [];
 
-const resizeCanvas = () => {
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
-  particles = Array.from({ length: 80 }, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    radius: Math.random() * 1.5 + 0.5,
-    speedX: (Math.random() - 0.5) * 0.2,
-    speedY: (Math.random() - 0.5) * 0.2,
-  }));
-};
+  const resizeCanvas = () => {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    particles = Array.from({ length: 80 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.2,
+      speedY: (Math.random() - 0.5) * 0.2,
+    }));
+  };
 
-const drawParticles = () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(15, 15, 15, 0.35)";
-  particles.forEach((p) => {
-    p.x += p.speedX;
-    p.y += p.speedY;
-    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  requestAnimationFrame(drawParticles);
-};
+  const drawParticles = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(15, 15, 15, 0.35)";
+    particles.forEach((p) => {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(drawParticles);
+  };
 
-resizeCanvas();
-drawParticles();
-window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+  drawParticles();
+  window.addEventListener("resize", resizeCanvas);
+}
