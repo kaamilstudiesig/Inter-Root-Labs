@@ -1,446 +1,878 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-[#080808] text-[#F5F5F3] overflow-x-hidden antialiased selection:bg-[#86BBD8] selection:text-white">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inter-Root Labs</title>
-  <link rel="icon" type="image/png" href="images/1-removebg-preview%20(1).png" />
-  <script>
-    (() => {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
-        document.documentElement.classList.add("dark");
-      }
-    })();
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inter-Root Labs | Engrave Your Presence</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Splitting CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        bebas: ['"Bebas Neue"', 'sans-serif'],
+                        inter: ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            black: '#080808',
+                            white: '#F5F5F3',
+                            violet: '#86BBD8',
+                            'violet-light': '#A1CDE6',
+                            lime: '#C8FF00',
+                            'lime-dark': '#A3CC00',
+                            grey1: '#111111',
+                            grey2: '#1C1C1C',
+                            grey3: '#888888',
+                            grey4: '#333333'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body, html {
+            cursor: none; /* Hide default cursor */
+            background-color: #080808;
+            color: #F5F5F3;
+        }
+
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 0px; }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: #F5F5F3;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        #custom-cursor.hover-violet {
+            width: 80px;
+            height: 80px;
+            background-color: #86BBD8;
+            mix-blend-mode: normal;
+        }
+
+        #custom-cursor.hover-lime {
+            width: 80px;
+            height: 80px;
+            background-color: #C8FF00;
+            mix-blend-mode: normal;
+        }
+
+        /* Grain Overlay */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 40;
+            opacity: 0.08;
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Splitting Chars */
+        .char { display: inline-block; }
+        .line { overflow: hidden; display: block; }
+        .word { display: inline-block; }
+
+        /* CTA Liquid Fill */
+        .btn-liquid {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-liquid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #F5F5F3;
+            transform: translateX(-101%);
+            transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+            z-index: 0;
+        }
+        .btn-liquid:hover::before {
+            transform: translateX(0);
+        }
+        .btn-liquid > span {
+            position: relative;
+            z-index: 1;
+            transition: color 0.4s ease;
+        }
+        .btn-liquid:hover > span {
+            color: #080808;
+        }
+
+        /* Marquee */
+        .marquee-container {
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .marquee-track {
+            display: flex;
+            flex-shrink: 0;
+            min-width: 100%;
+        }
+
+        /* Clip Path Transitions */
+        .clip-wipe-up { clip-path: inset(100% 0 0 0); }
+        .clip-expand { clip-path: circle(0% at 50% 50%); }
+
+        /* Duotone filters via SVG and mix-blend-mode */
+        .duotone-violet {
+            position: relative;
+            overflow: hidden;
+        }
+        .duotone-violet::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: #86BBD8;
+            mix-blend-mode: screen;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .duotone-violet::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: #080808;
+            mix-blend-mode: multiply;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .duotone-lime {
+            position: relative;
+            overflow: hidden;
+        }
+        .duotone-lime::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: #C8FF00;
+            mix-blend-mode: screen;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .duotone-lime::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: #080808;
+            mix-blend-mode: multiply;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Input Underline Animation */
+        .input-underline {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #333333;
+        }
+        .input-underline::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: #86BBD8;
+            transition: width 0.4s ease;
+        }
+        .group:focus-within .input-underline::after {
+            width: 100%;
+        }
+
+        /* Page Transition Overlay */
+        #page-transition {
+            position: fixed;
+            inset: 0;
+            background: #080808;
+            z-index: 99999;
+            pointer-events: none;
+            clip-path: circle(0% at 50% 50%);
+        }
+
+        a { color: inherit; }
+    </style>
 </head>
-<body>
-  <!-- Navbar -->
-  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-[#F9F8F5]/95 backdrop-blur">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="images/1.png" alt="Inter-Root Labs emblem" class="w-10 h-10 rounded-full border border-black/10 object-cover" />
-        <span class="text-xl md:text-2xl font-bold tracking-[0.12em]">INTER-ROOT LABS</span>
-      </div>
-      <nav class="hidden md:flex items-center gap-6 text-sm uppercase tracking-[0.14em]">
-        <a href="#services" class="hover:text-[#B8943A] px-3 py-2 rounded-full">Services</a>
-        <a href="#process" class="hover:text-[#B8943A] px-3 py-2 rounded-full">How It Works</a>
-        <a href="#work" class="hover:text-[#B8943A] px-3 py-2 rounded-full">Work</a>
-        <a href="#pricing" class="hover:text-[#B8943A] px-3 py-2 rounded-full">Pricing</a>
-        <a href="#contact" class="hover:text-[#B8943A] px-3 py-2 rounded-full">Contact</a>
-      </nav>
-      <button id="menu-btn" class="md:hidden text-sm uppercase tracking-[0.14em] px-4 py-2 rounded-full border border-black/20 min-h-[44px]">Menu</button>
-    </div>
-    <div id="mobile-menu" class="hidden md:hidden border-t border-black/10 bg-[#F9F8F5]">
-      <div class="px-6 py-4 flex flex-col gap-3 text-sm uppercase tracking-[0.14em]">
-        <a href="#services" class="hover:text-[#B8943A] px-3 py-3 rounded-full">Services</a>
-        <a href="#process" class="hover:text-[#B8943A] px-3 py-3 rounded-full">How It Works</a>
-        <a href="#work" class="hover:text-[#B8943A] px-3 py-3 rounded-full">Work</a>
-        <a href="#pricing" class="hover:text-[#B8943A] px-3 py-3 rounded-full">Pricing</a>
-        <a href="#contact" class="hover:text-[#B8943A] px-3 py-3 rounded-full">Contact</a>
-      </div>
-    </div>
-  </header>
+<body class="bg-brand-black text-brand-white">
 
-  <div id="lamp" class="lamp-fixture hidden md:block" aria-hidden="true">
-    <svg viewBox="0 0 160 300" class="w-28 h-52">
-      <g class="lamp-swing">
-        <rect x="60" y="0" width="40" height="12" rx="4" fill="currentColor" />
-        <line x1="80" y1="12" x2="80" y2="150" stroke="currentColor" stroke-width="2" />
-        <path d="M40 150h80l-18 40H58z" fill="currentColor" />
-        <circle cx="80" cy="195" r="16" class="lamp-bulb" />
-        <line x1="80" y1="210" x2="80" y2="260" stroke="currentColor" stroke-width="2" />
-        <line x1="80" y1="260" x2="80" y2="280" stroke="currentColor" stroke-width="2" class="lamp-chain" />
-        <circle cx="80" cy="288" r="6" fill="currentColor" class="lamp-chain" />
-        <rect x="76" y="292" width="8" height="8" rx="2" fill="currentColor" class="lamp-chain" />
-      </g>
-    </svg>
-  </div>
+    <div id="custom-cursor"></div>
+    <div class="grain-overlay"></div>
+    <div id="page-transition"></div>
 
-  <button id="theme-toggle" class="theme-toggle md:hidden" aria-label="Toggle dark mode">
-    <span class="theme-icon">☀︎</span>
-  </button>
-
-  <!-- Hero -->
-  <section id="hero" class="relative min-h-screen flex items-center pt-24 overflow-hidden">
-    <canvas id="particle-canvas"></canvas>
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-20">
-      <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 items-center text-center lg:text-left">
-        <div class="order-2 lg:order-1">
-          <p class="uppercase text-xs tracking-[0.4em] text-black/60 mb-6">Inter-Root Labs Agency</p>
-          <h1 class="text-3xl md:text-5xl lg:text-7xl leading-tight mb-6">We Build Digital Presence For Businesses That Mean Business.</h1>
-          <p class="text-base md:text-lg text-black/70 mb-10">Websites. SEO. Online visibility. Built for gyms, restaurants, and local businesses across India.</p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <a href="#work" class="px-6 py-3 border border-black/30 uppercase tracking-[0.2em] text-xs text-center rounded-full hover:border-[#B8943A] hover:text-[#B8943A] min-h-[44px]">See Our Work</a>
-            <a href="#contact" class="px-6 py-3 bg-[#B8943A] text-[#0F0F0F] uppercase tracking-[0.2em] text-xs text-center rounded-full hover:opacity-90 min-h-[44px]">Get a Free Demo</a>
-          </div>
-        </div>
-        <div class="order-1 lg:order-2 flex justify-center lg:justify-end">
-          <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-sm w-full">
-            <img src="images/logo-wordmark.jpeg" alt="Inter-Root Labs wordmark" class="w-full rounded-2xl object-cover bg-white/60" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Problem Hook -->
-  <section id="problem" class="fade-section">
-    <div class="max-w-6xl mx-auto px-6 py-20">
-      <div class="section-divider">
-        <span class="diamond"></span>
-      </div>
-      <div class="mt-14 grid md:grid-cols-2 gap-10 items-center">
-        <div class="text-2xl md:text-4xl lg:text-5xl font-semibold leading-tight">87% of customers search online before visiting a local business.</div>
-        <p class="text-base text-black/70">Most local brands still rely on word-of-mouth while their competitors win attention online. We bridge that gap with premium, conversion-first digital presence that earns trust instantly.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services -->
-  <section id="services" class="fade-section">
-    <div class="max-w-6xl mx-auto px-6 py-20">
-      <div class="flex items-center justify-between">
-        <h2 class="text-3xl md:text-5xl lg:text-6xl">Services</h2>
-        <div class="h-px w-20 bg-black/20"></div>
-      </div>
-      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <div class="border border-black/10 p-8 rounded-2xl hover:border-[#B8943A] hover:-translate-y-1 transition">
-          <svg class="w-10 h-10 mb-4" viewBox="0 0 48 48" fill="none" stroke="#0F0F0F" stroke-width="2">
-            <rect x="6" y="10" width="36" height="26" rx="2" />
-            <path d="M6 18h36" />
-          </svg>
-          <h3 class="text-2xl mb-2">Website Design</h3>
-          <p class="text-black/70">Modern, high-trust websites that turn local traffic into booked calls and walk-ins.</p>
-        </div>
-        <div class="border border-black/10 p-8 rounded-2xl hover:border-[#B8943A] hover:-translate-y-1 transition">
-          <svg class="w-10 h-10 mb-4" viewBox="0 0 48 48" fill="none" stroke="#0F0F0F" stroke-width="2">
-            <circle cx="22" cy="22" r="12" />
-            <path d="M34 34l8 8" />
-          </svg>
-          <h3 class="text-2xl mb-2">SEO Optimisation</h3>
-          <p class="text-black/70">On-page and local SEO that helps customers find you before your competitors.</p>
-        </div>
-        <div class="border border-black/10 p-8 rounded-2xl hover:border-[#B8943A] hover:-translate-y-1 transition">
-          <svg class="w-10 h-10 mb-4" viewBox="0 0 48 48" fill="none" stroke="#0F0F0F" stroke-width="2">
-            <rect x="8" y="8" width="32" height="32" rx="6" />
-            <path d="M16 24h16M24 16v16" />
-          </svg>
-          <h3 class="text-2xl mb-2">Google Business Setup</h3>
-          <p class="text-black/70">Optimised profiles, reviews strategy, and map ranking improvements.</p>
-        </div>
-        <div class="border border-black/10 p-8 rounded-2xl hover:border-[#B8943A] hover:-translate-y-1 transition">
-          <svg class="w-10 h-10 mb-4" viewBox="0 0 48 48" fill="none" stroke="#0F0F0F" stroke-width="2">
-            <path d="M8 34c6-8 26-8 32 0" />
-            <circle cx="16" cy="20" r="4" />
-            <circle cx="32" cy="20" r="4" />
-          </svg>
-          <h3 class="text-2xl mb-2">Social Media Presence</h3>
-          <p class="text-black/70">Curated content and posting systems that keep your brand top-of-mind.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- How It Works -->
-  <section id="process" class="fade-section">
-    <div class="max-w-6xl mx-auto px-6 py-20">
-      <div class="flex items-center justify-between">
-        <h2 class="text-3xl md:text-5xl lg:text-6xl">How It Works</h2>
-        <div class="h-px w-20 bg-black/20"></div>
-      </div>
-      <div class="mt-12">
-        <div class="hidden lg:flex items-center justify-between relative">
-          <div class="absolute top-6 left-0 right-0 border-t border-dashed border-black/20"></div>
-          <div class="relative bg-[#F9F8F5] px-4">
-            <p class="text-sm uppercase tracking-[0.2em] text-black/50">01</p>
-            <h3 class="text-2xl mt-2">Free Audit</h3>
-            <p class="text-black/70">We review your online presence.</p>
-          </div>
-          <div class="relative bg-[#F9F8F5] px-4">
-            <p class="text-sm uppercase tracking-[0.2em] text-black/50">02</p>
-            <h3 class="text-2xl mt-2">We Design Your Demo</h3>
-            <p class="text-black/70">Preview the vision before launch.</p>
-          </div>
-          <div class="relative bg-[#F9F8F5] px-4">
-            <p class="text-sm uppercase tracking-[0.2em] text-black/50">03</p>
-            <h3 class="text-2xl mt-2">Launch &amp; Optimise</h3>
-            <p class="text-black/70">Go live and grow steadily.</p>
-          </div>
-        </div>
-        <div class="lg:hidden space-y-8">
-          <div class="border-l border-dashed border-black/20 pl-6">
-            <p class="text-sm uppercase tracking-[0.2em] text-black/50">01</p>
-            <h3 class="text-2xl mt-2">Free Audit</h3>
-            <p class="text-black/70">We review your online presence.</p>
-          </div>
-          <div class="border-l border-dashed border-black/20 pl-6">
-            <p class="text-sm uppercase tracking-[0.2em] text-black/50">02</p>
-            <h3 class="text-2xl mt-2">We Design Your Demo</h3>
-            <p class="text-black/70">Preview the vision before launch.</p>
-          </div>
-          <div class="border-l border-dashed border-black/20 pl-6">
-            <p class="text-sm uppercase tracking-[0.2em] text-black/50">03</p>
-            <h3 class="text-2xl mt-2">Launch &amp; Optimise</h3>
-            <p class="text-black/70">Go live and grow steadily.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Work -->
-  <section id="work" class="fade-section">
-    <div class="max-w-6xl mx-auto px-6 py-20">
-      <div class="flex items-center justify-between">
-        <h2 class="text-3xl md:text-5xl lg:text-6xl">Our Work</h2>
-        <div class="h-px w-20 bg-black/20"></div>
-      </div>
-      <div class="mt-12 grid gap-8 lg:grid-cols-3">
-        <div class="rounded-2xl border border-black/10 p-6 text-center">
-          <div class="bg-black/5 rounded-2xl overflow-hidden">
-            <div class="aspect-video">
-              <img src="images/day1-media.png" alt="Day 1 Media website preview" class="w-full h-full object-cover" />
+    <!-- LOADER -->
+    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-8">
+        <!-- Logo Text -->
+        <div class="relative z-20">
+            <div id="loader-logo-wrap" class="overflow-hidden">
+                <span id="loader-logo" class="font-bebas text-5xl md:text-7xl tracking-[0.2em] text-brand-white translate-y-[100%] block">INTER-ROOT LABS</span>
             </div>
-          </div>
-          <p class="text-sm uppercase tracking-[0.2em] text-black/60 mt-4">Day 1 Media</p>
-          <a href="https://day1-media.com" class="text-xs uppercase tracking-[0.2em] text-black/50 hover:text-[#B8943A] block mt-2">day1-media.com</a>
         </div>
-      </div>
-      <div class="mt-12 border-l-2 border-[#B8943A] pl-6 rounded-2xl">
-        <p class="text-2xl md:text-3xl italic text-black/80">“Inter-Root made us look like a premium brand overnight — our bookings doubled in six weeks.”</p>
-        <p class="text-sm uppercase tracking-[0.2em] text-black/50 mt-3">Founder, Ironforge Fitness</p>
-      </div>
+        <!-- Progress Bar -->
+        <div class="w-64 h-[2px] bg-brand-grey4 overflow-hidden relative z-10" id="loader-progress-container">
+            <div id="loader-progress" class="absolute top-0 left-0 h-full w-0 bg-brand-white"></div>
+        </div>
     </div>
-  </section>
 
-  <!-- Pricing 
-  <section id="pricing" class="fade-section">
-    <div class="max-w-6xl mx-auto px-6 py-20">
-      <div class="flex items-center justify-between">
-        <h2 class="text-3xl md:text-5xl lg:text-6xl">Pricing</h2>
-        <div class="h-px w-20 bg-black/20"></div>
-      </div>
-      <div class="mt-12 grid gap-6 lg:grid-cols-3">
-        <div class="border border-black/10 p-8 rounded-2xl">
-          <h3 class="text-2xl">Essential Plan</h3>
-          <p class="text-3xl mt-4">₹9,999–19,999 / month</p>
-          <ul class="mt-6 space-y-2 text-black/70">
-            <li>Professional 1–5 page website</li>
-            <li>Mobile-first responsive design</li>
-            <li>SEO foundation and conversion-focused UX</li>
-            <li>Google Maps, contact, and booking setup</li>
-            <li>Social media launch integration</li>
-          </ul>
-          <a href="#contact" class="mt-8 inline-block px-6 py-3 border border-black/30 uppercase tracking-[0.2em] text-xs rounded-full hover:border-[#B8943A] hover:text-[#B8943A] min-h-[44px]">Get Started</a>
+    <!-- WRAPPER FOR SMOOTH SCROLL -->
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <!-- MAIN CONTENT WRAPPER FOR PARALLAX FOOTER -->
+            <main id="main-content" class="relative z-10 bg-brand-black flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.5)] pb-0">
+
+                <!-- NAVBAR -->
+                <nav id="navbar" x-data="{ open: false }" class="fixed top-0 w-full flex items-center justify-between px-6 py-5 md:px-12 z-50 text-sm uppercase tracking-widest font-inter text-brand-grey3 transition-colors duration-300">
+                    <!-- Left -->
+                    <div class="flex items-center gap-4 cursor-pointer" data-cursor="hover" onclick="window.scrollTo(0,0)">
+                        <img src="images/logo-emblem-light.jpeg" class="w-8 h-8 rounded-full object-cover mix-blend-screen" alt="Logo">
+                        <span class="font-bebas font-normal text-[18px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
+                    </div>
+                    
+                    <!-- Right -->
+                    <div class="hidden md:flex items-center gap-8 font-medium text-[11px]">
+                        <a href="developers.html" class="hover:text-brand-violet hover:scale-110 transition-all duration-300" data-cursor="hover-violet">DEVELOPERS</a>
+                        <a href="studio.html" class="hover:text-brand-lime hover:scale-110 transition-all duration-300" data-cursor="hover-lime">STUDIO</a>
+                        <a href="#about" class="hover:text-brand-white hover:scale-110 transition-all duration-300" data-cursor="hover">ABOUT</a>
+                        <a href="#contact" class="hover:text-brand-white hover:scale-110 transition-all duration-300" data-cursor="hover">CONTACT US</a>
+                    </div>
+
+                    <!-- Mobile Toggle -->
+                    <button class="md:hidden z-50 text-brand-white" @click="open = !open" data-cursor="hover">
+                        <span x-show="!open">MENU</span>
+                        <span x-show="open">CLOSE</span>
+                    </button>
+
+                    <!-- Mobile Nav -->
+                    <div x-show="open" x-transition.opacity.duration.300ms class="fixed inset-0 bg-brand-black/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 text-4xl font-bebas z-40">
+                        <a href="developers.html" class="hover:text-brand-violet transition-colors" data-cursor="hover-violet">DEVELOPERS</a>
+                        <a href="studio.html" class="hover:text-brand-lime transition-colors" data-cursor="hover-lime">STUDIO</a>
+                        <a href="#about" @click="open=false" class="hover:text-brand-white transition-colors" data-cursor="hover">ABOUT</a>
+                        <a href="#contact" @click="open=false" class="hover:text-brand-white transition-colors" data-cursor="hover">CONTACT US</a>
+                    </div>
+                </nav>
+
+                <!-- HERO -->
+                <section class="min-h-screen w-full relative flex flex-col items-center justify-center overflow-hidden bg-brand-black">
+                    <!-- Parallax Background -->
+                    <div id="hero-bg" class="absolute inset-0 w-full h-full">
+                        <img src="image_6.jpeg" class="w-full h-full object-cover opacity-40 mix-blend-luminosity scale-110" alt="Background Texture" />
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/50 to-brand-black"></div>
+                    </div>
+                    
+                    <div class="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col items-start mt-20">
+                        <h1 id="hero-title" class="font-bebas text-[14vw] md:text-[13vw] leading-[0.85] uppercase tracking-tight text-brand-white break-words" data-splitting>ENGRAVE YOUR<br>PRESENCE</h1>
+                        
+                        <div class="flex flex-col items-end w-full mt-12 gap-8 text-right">
+                            <p id="hero-sub" class="font-inter text-brand-grey3 text-xl md:text-3xl uppercase tracking-[0.2em] max-w-xl opacity-0">
+                                Shaping how brands look, speak, and exist
+                            </p>
+                            <a href="#contact" class="btn-liquid border border-brand-white/30 px-10 py-5 rounded-full font-bebas text-2xl tracking-widest text-brand-white overflow-hidden" data-cursor="hover">
+                                <span>LEVEL UP NOW</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MARQUEE -->
+                <section class="py-6 border-y border-brand-grey4/30 bg-brand-grey1 relative overflow-hidden flex flex-col gap-2">
+                    <!-- Top Row -->
+                    <div class="marquee-container" data-speed="0.25">
+                        <div class="marquee-track font-bebas text-3xl md:text-4xl tracking-[0.1em] uppercase">
+                            <span class="mx-6 text-brand-white">GOLDKRAFT</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-[#555]">AARAMBHA CLINIC</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-brand-white">DAY1 MEDIA</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-[#555]">GANDHADA GOODU</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-brand-white">AUTO SHARE</span><span class="mx-6 text-brand-grey4">•</span>
+                            <!-- Duplicates for seamless loop -->
+                            <span class="mx-6 text-brand-white">GOLDKRAFT</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-[#555]">AARAMBHA CLINIC</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-brand-white">DAY1 MEDIA</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-[#555]">GANDHADA GOODU</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-brand-white">AUTO SHARE</span><span class="mx-6 text-brand-grey4">•</span>
+                        </div>
+                    </div>
+                    <!-- Bottom Row (Reverse) -->
+                    <div class="marquee-container" data-speed="-0.35">
+                        <div class="marquee-track font-bebas text-3xl md:text-4xl tracking-[0.1em] uppercase">
+                            <span class="mx-6 text-[#555]">GOLDKRAFT</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-brand-white">AARAMBHA CLINIC</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-[#555]">DAY1 MEDIA</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-brand-white">GANDHADA GOODU</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-[#555]">AUTO SHARE</span><span class="mx-6 text-brand-grey4">•</span>
+                            <!-- Duplicates -->
+                            <span class="mx-6 text-[#555]">GOLDKRAFT</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-brand-white">AARAMBHA CLINIC</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-[#555]">DAY1 MEDIA</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-brand-white">GANDHADA GOODU</span><span class="mx-6 text-brand-grey4">•</span>
+                            <span class="mx-6 text-[#555]">AUTO SHARE</span><span class="mx-6 text-brand-grey4">•</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ABOUT -->
+                <section id="about" class="py-32 md:py-48 px-6 md:px-12 relative overflow-hidden bg-brand-black">
+                    <!-- Watermark -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none opacity-[0.03] select-none flex items-center justify-center">
+                        <span class="font-bebas text-[30vw] leading-none whitespace-nowrap">ABOUT US</span>
+                    </div>
+
+                    <div class="max-w-[1000px] mx-auto relative z-10 flex border-l border-brand-violet pl-8 md:pl-16">
+                        <div class="font-inter font-light text-2xl md:text-4xl lg:text-5xl text-brand-white leading-[1.4] tracking-tight about-text-container">
+                            <div class="about-line-text">We combine full-stack development</div>
+                            <div class="about-line-text text-brand-grey3">and professional media production</div>
+                            <div class="about-line-text">into one seamless ecosystem,</div>
+                            <div class="about-line-text">so your brand looks, speaks, and</div>
+                            <div class="about-line-text text-brand-grey3">performs exactly as it should.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EXPLORE TITLE -->
+                <section class="w-full bg-brand-black py-16 flex items-center justify-center border-t border-brand-grey4/30">
+                    <h2 class="font-bebas text-5xl md:text-7xl text-brand-white tracking-widest uppercase">EXPLORE</h2>
+                </section>
+
+                <!-- PROJECTS SPLIT -->
+                <section class="flex flex-col md:flex-row w-full h-auto md:h-[85vh] border-y border-brand-grey4/30">
+                    <!-- DEVELOPERS -->
+                    <a href="developers.html" class="split-link relative w-full md:w-1/2 h-[50vh] md:h-full flex items-center justify-center group border-b md:border-b-0 md:border-r border-brand-grey4/30 bg-brand-grey1 hover:scale-[1.03] hover:z-30 transition-all duration-500" data-cursor="hover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-violet/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0 translate-y-10 group-hover:translate-y-0"></div>
+                        
+                        <h2 class="font-bebas text-5xl md:text-7xl lg:text-8xl uppercase tracking-widest z-20 text-brand-white transition-all duration-500 group-hover:text-brand-violet-light group-hover:drop-shadow-[0_0_40px_rgba(134,187,216,0.3)]">DEVELOPERS</h2>
+                        
+                        <div class="absolute right-8 md:right-12 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 -translate-x-12 group-hover:translate-x-0 transition-all duration-500 ease-out z-20">
+                            <svg class="w-12 h-12 text-brand-violet-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M2 12h20M15 5l7 7-7 7"></path></svg>
+                        </div>
+                    </a>
+                    
+                    <!-- STUDIO -->
+                    <a href="studio.html" class="split-link relative w-full md:w-1/2 h-[50vh] md:h-full flex items-center justify-center group bg-brand-grey1 hover:scale-[1.03] hover:z-30 transition-all duration-500" data-cursor="hover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-lime/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0 translate-y-10 group-hover:translate-y-0"></div>
+                        
+                        <h2 class="font-bebas text-5xl md:text-7xl lg:text-8xl uppercase tracking-widest z-20 text-brand-white transition-all duration-500 group-hover:text-brand-black group-hover:drop-shadow-[0_0_40px_rgba(200,255,0,0.2)]">STUDIO</h2>
+                        
+                        <div class="absolute right-8 md:right-12 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 -translate-x-12 group-hover:translate-x-0 transition-all duration-500 ease-out z-20">
+                            <svg class="w-12 h-12 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M2 12h20M15 5l7 7-7 7"></path></svg>
+                        </div>
+                    </a>
+                </section>
+
+                <!-- PROCESS -->
+                <section class="bg-brand-black py-32 px-6 border-b border-brand-grey4/30">
+                    <div class="max-w-[800px] mx-auto text-center mb-24">
+                        <h3 class="font-inter font-medium text-[12px] tracking-[0.2em] text-brand-grey3 uppercase mb-6">THE PROCESS</h3>
+                        <p class="font-inter text-brand-white text-xl md:text-2xl leading-[1.6] font-light">The process is built to move from clarity to execution without unnecessary back and forth.</p>
+                    </div>
+
+                    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-brand-grey4/30 border border-brand-grey4/30 process-grid p-[1px]">
+                        
+                        <!-- 01 DISCOVERY -->
+                        <div class="workflow-card bg-brand-black p-12 md:p-16 flex flex-col justify-between min-h-[400px] group transition-colors duration-500 hover:border-brand-violet hover:bg-brand-grey1 border border-transparent">
+                            <div class="font-bebas text-brand-grey4 text-5xl mb-12 scramble-num" data-val="01">00</div>
+                            <div>
+                                <h2 class="font-bebas text-5xl text-brand-white uppercase tracking-tight mb-6">DISCOVERY</h2>
+                                <div class="w-[40px] h-[2px] bg-brand-violet mb-6 group-hover:w-[80px] transition-all duration-500"></div>
+                                <p class="font-inter text-brand-grey3 text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We begin by understanding your business, your audience, and the gap between where you are and where you need to be.</p>
+                            </div>
+                        </div>
+
+                        <!-- 02 CONCEPT -->
+                        <div class="workflow-card bg-brand-black p-12 md:p-16 flex flex-col justify-between min-h-[400px] group transition-colors duration-500 hover:border-brand-lime hover:bg-brand-grey1 border border-transparent">
+                            <div class="font-bebas text-brand-grey4 text-5xl mb-12 scramble-num" data-val="02">00</div>
+                            <div>
+                                <h2 class="font-bebas text-5xl text-brand-white uppercase tracking-tight mb-6">CONCEPT</h2>
+                                <div class="w-[40px] h-[2px] bg-brand-lime mb-6 group-hover:w-[80px] transition-all duration-500"></div>
+                                <p class="font-inter text-brand-grey3 text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We translate the findings into a creative direction — defining the voice, visual language, and structure.</p>
+                            </div>
+                        </div>
+
+                        <!-- 03 EXECUTION -->
+                        <div class="workflow-card bg-brand-black p-12 md:p-16 flex flex-col justify-between min-h-[400px] group transition-colors duration-500 hover:border-brand-violet hover:bg-brand-grey1 border border-transparent">
+                            <div class="font-bebas text-brand-grey4 text-5xl mb-12 scramble-num" data-val="03">00</div>
+                            <div>
+                                <h2 class="font-bebas text-5xl text-brand-white uppercase tracking-tight mb-6">EXECUTION</h2>
+                                <div class="w-[40px] h-[2px] bg-brand-violet mb-6 group-hover:w-[80px] transition-all duration-500"></div>
+                                <p class="font-inter text-brand-grey3 text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">The concept is built into reality. Development, design, and content production happen in tight coordination.</p>
+                            </div>
+                        </div>
+
+                        <!-- 04 LAUNCH -->
+                        <div class="workflow-card bg-brand-black p-12 md:p-16 flex flex-col justify-between min-h-[400px] group transition-colors duration-500 hover:border-brand-lime hover:bg-brand-grey1 border border-transparent">
+                            <div class="font-bebas text-brand-grey4 text-5xl mb-12 scramble-num" data-val="04">00</div>
+                            <div>
+                                <h2 class="font-bebas text-5xl text-brand-white uppercase tracking-tight mb-6">LAUNCH</h2>
+                                <div class="w-[40px] h-[2px] bg-brand-lime mb-6 group-hover:w-[80px] transition-all duration-500"></div>
+                                <p class="font-inter text-brand-grey3 text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We deploy, publish, and hand over a system that is ready to scale — an operational foundation.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- TESTIMONIALS -->
+                <section class="bg-[#111111] py-32 px-6 overflow-hidden relative border-b border-brand-grey4/30">
+                    <div class="absolute inset-0 grain-overlay"></div>
+                    
+                    <div class="max-w-7xl mx-auto" x-data="testimonials()">
+                        <div class="flex flex-col md:flex-row items-center gap-16 md:gap-24 relative z-10">
+                            
+                            <!-- Image Left -->
+                            <div class="w-full md:w-1/3 flex-shrink-0 relative aspect-[3/4] overflow-hidden rounded-sm" data-cursor="hover">
+                                <template x-for="(item, index) in items" :key="index">
+                                    <div class="absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out"
+                                         :class="current === index ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                                         <!-- Duotone wrapper applied conditionally -->
+                                         <div class="w-full h-full" :class="index % 2 === 0 ? 'duotone-violet' : 'duotone-lime'">
+                                            <img :src="item.image" class="w-full h-full object-cover filter grayscale" alt="Client" />
+                                         </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Content Right -->
+                            <div class="w-full md:w-2/3 relative min-h-[400px] flex flex-col justify-center">
+                                <h2 class="font-bebas text-4xl md:text-6xl uppercase tracking-tight text-brand-white mb-16">WORDS FROM THE PEOPLE WE'VE BUILT FOR</h2>
+                                
+                                <div class="relative w-full">
+                                    <div class="absolute -top-16 -left-8 text-[12rem] font-bebas text-brand-violet/20 leading-none select-none pointer-events-none z-0">"</div>
+                                    
+                                    <template x-for="(item, index) in items" :key="index">
+                                        <div class="relative z-10 transition-all duration-500 ease-out"
+                                             x-show="current === index"
+                                             x-transition:enter="transition ease-out duration-500 delay-200"
+                                             x-transition:enter-start="opacity-0 translate-y-4"
+                                             x-transition:enter-end="opacity-100 translate-y-0"
+                                             x-transition:leave="transition ease-in duration-300 absolute inset-0"
+                                             x-transition:leave-start="opacity-100 translate-y-0"
+                                             x-transition:leave-end="opacity-0 -translate-y-4">
+                                            
+                                            <h3 class="font-inter font-light italic text-2xl md:text-3xl text-brand-white mb-8 leading-tight" x-text="item.headline"></h3>
+                                            
+                                            <div class="h-[1px] w-12 mb-8" :class="index % 2 === 0 ? 'bg-brand-violet' : 'bg-brand-lime'"></div>
+                                            
+                                            <p class="font-inter text-brand-grey3 text-lg leading-relaxed mb-10 max-w-2xl" x-text="item.body"></p>
+                                            
+                                            <div>
+                                                <p class="font-bebas text-brand-white text-2xl tracking-widest" x-text="item.name"></p>
+                                                <p class="font-inter text-brand-grey3 text-sm mt-1" x-text="item.role"></p>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <!-- Nav -->
+                                <div class="flex gap-4 mt-12 relative z-20">
+                                    <button @click="prev()" class="w-12 h-12 border border-brand-grey4 flex items-center justify-center transition-colors hover:bg-brand-white hover:text-brand-black rounded-full group outline-none" data-cursor="hover">
+                                        <svg class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                    </button>
+                                    <button @click="next()" class="w-12 h-12 border border-brand-grey4 flex items-center justify-center transition-colors hover:bg-brand-white hover:text-brand-black rounded-full group outline-none" data-cursor="hover">
+                                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTACT FORM -->
+                <section id="contact" class="bg-[#EBEBEB] py-32 px-6 border-b border-brand-grey4/30">
+                    <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-20">
+                        <div class="w-full md:w-1/2">
+                            <h2 class="font-bebas text-[12vw] md:text-[8rem] leading-[0.85] tracking-tight uppercase text-brand-black mb-8">
+                                HAVE A<br/>PROJECT<br/>IN MIND?
+                            </h2>
+                            <p class="font-inter text-[#555555] text-lg max-w-sm font-light">If you seek a digital product built with uncompromising precision, submit your inquiry.</p>
+                        </div>
+                        
+                        <div class="w-full md:w-1/2 pt-4">
+                            <form class="flex flex-col gap-10" onsubmit="event.preventDefault();">
+                                
+                                <!-- Service Selector -->
+                                <div class="flex flex-col gap-4 mb-4">
+                                    <label class="font-bebas text-sm text-[#555555] tracking-[0.1em]">I NEED HELP WITH:</label>
+                                    <div class="flex flex-wrap gap-4">
+                                        <label class="cursor-pointer group relative">
+                                            <input type="radio" name="service" class="peer sr-only" checked>
+                                            <div class="px-6 py-3 border border-[#cccccc] text-[#555555] font-inter text-sm transition-all peer-checked:border-brand-violet peer-checked:text-brand-violet peer-checked:bg-brand-violet/10 hover:border-[#888]">Development</div>
+                                        </label>
+                                        <label class="cursor-pointer group relative">
+                                            <input type="radio" name="service" class="peer sr-only">
+                                            <div class="px-6 py-3 border border-[#cccccc] text-[#555555] font-inter text-sm transition-all peer-checked:border-brand-lime peer-checked:text-[#000] peer-checked:bg-brand-lime/30 hover:border-[#888]">Studio</div>
+                                        </label>
+                                        <label class="cursor-pointer group relative">
+                                            <input type="radio" name="service" class="peer sr-only">
+                                            <div class="px-6 py-3 border border-[#cccccc] text-[#555555] font-inter text-sm transition-all peer-checked:border-brand-black peer-checked:text-brand-white peer-checked:bg-brand-black hover:border-[#888]">Both</div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="group relative pt-4">
+                                    <input type="text" id="name" required class="peer w-full bg-transparent border-none text-brand-black font-inter focus:ring-0 outline-none pb-3" placeholder=" " />
+                                    <label for="name" class="absolute left-0 top-4 font-bebas text-[#555555] tracking-[0.1em] transition-all duration-300 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-brand-violet peer-valid:-top-4 peer-valid:text-xs">NAME</label>
+                                    <div class="input-underline"></div>
+                                </div>
+
+                                <div class="group relative pt-4">
+                                    <input type="email" id="email" required class="peer w-full bg-transparent border-none text-brand-black font-inter focus:ring-0 outline-none pb-3" placeholder=" " />
+                                    <label for="email" class="absolute left-0 top-4 font-bebas text-[#555555] tracking-[0.1em] transition-all duration-300 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-brand-violet peer-valid:-top-4 peer-valid:text-xs">EMAIL</label>
+                                    <div class="input-underline"></div>
+                                </div>
+
+                                <div class="group relative pt-4">
+                                    <textarea id="message" rows="1" required class="peer w-full bg-transparent border-none text-brand-black font-inter focus:ring-0 outline-none pb-3 resize-none overflow-hidden" placeholder=" " oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                                    <label for="message" class="absolute left-0 top-4 font-bebas text-[#555555] tracking-[0.1em] transition-all duration-300 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-brand-violet peer-valid:-top-4 peer-valid:text-xs">MESSAGE</label>
+                                    <div class="input-underline"></div>
+                                </div>
+
+                                <button type="submit" class="w-full bg-brand-black text-brand-white border border-brand-black rounded-sm font-bebas text-2xl tracking-widest py-6 mt-4 hover:bg-brand-violet hover:border-brand-violet transition-colors duration-400 group overflow-hidden relative" data-cursor="hover">
+                                    <span class="relative z-10 block transition-transform duration-300 group-hover:-translate-y-[150%]">SUBMIT INQUIRY</span>
+                                    <span class="absolute inset-0 z-10 flex items-center justify-center translate-y-[150%] transition-transform duration-300 group-hover:translate-y-0 text-brand-white">SUBMIT INQUIRY</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer id="footer" class="fixed bottom-0 left-0 w-full z-0 bg-[#000000] py-12 px-6 h-screen flex flex-col justify-end overflow-hidden">
+                <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between gap-12 relative z-10 pb-4">
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">LOCATION</span>
+                        <p>Bangalore, India</p>
+                        <p>Available Worldwide</p>
+                    </div>
+
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">SOCIAL</span>
+                        <a href="#" class="hover:text-brand-white transition-colors" data-cursor="hover">INSTAGRAM</a>
+                        <a href="#" class="hover:text-brand-white transition-colors" data-cursor="hover">LINKEDIN</a>
+                    </div>
+
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">SAY HELLO</span>
+                        <a href="mailto:hello@inter-root.com" class="hover:text-brand-violet transition-colors" data-cursor="hover">HELLO@INTER-ROOT.COM</a>
+                        <p>+91 999 999 9999</p>
+                    </div>
+                </div>
+                
+                <div class="w-full relative z-10 flex justify-center overflow-hidden">
+                    <span id="footer-wordmark" class="font-bebas text-[18vw] leading-[0.8] text-brand-white whitespace-nowrap tracking-tight translate-y-4">INTER-ROOT LABS</span>
+                </div>
+            </footer>
+
         </div>
-        <div class="border-2 border-[#B8943A] p-8 rounded-2xl relative">
-          <span class="absolute -top-3 left-6 bg-[#B8943A] text-[#0F0F0F] text-xs uppercase tracking-[0.2em] px-3 py-1">Most Popular</span>
-          <h3 class="text-2xl">Growth Plan</h3>
-          <p class="text-3xl mt-4">₹20,000-40,000/mo</p>
-          <ul class="mt-6 space-y-2 text-black/70">
-            <li>Scalable website designed for growth</li>
-            <li>Complete local SEO optimisation</li>
-            <li>Reputation and review strategy</li>
-            <li>Social media content workflow</li>
-            <li>Monthly performance reporting</li>
-          </ul>
-          <a href="#contact" class="mt-8 inline-block px-6 py-3 bg-[#B8943A] text-[#0F0F0F] uppercase tracking-[0.2em] text-xs rounded-full hover:opacity-90 min-h-[44px]">Get Started</a>
-        </div>
-        <div class="border border-black/10 p-8 rounded-2xl">
-          <h3 class="text-2xl">Scaling (Premium) Plan</h3>
-          <p class="text-3xl mt-4">₹45,000–60,000+ / month</p>
-          <ul class="mt-6 space-y-2 text-black/70">
-            <li>Custom premium website with CMS</li>
-            <li>Brand identity and visual system</li>
-            <li>Advanced SEO and campaign management</li>
-            <li>High-value content production</li>
-            <li>Dedicated growth strategist</li>
-            <li>Priority support and ongoing updates</li>
-          </ul>
-          <a href="#contact" class="mt-8 inline-block px-6 py-3 border border-black/30 uppercase tracking-[0.2em] text-xs rounded-full hover:border-[#B8943A] hover:text-[#B8943A] min-h-[44px]">Get Started</a>
-        </div>
-      </div>
     </div>
-  </section>
--->
-  <!-- Contact -->
-  <section id="contact" class="fade-section">
-    <div class="max-w-6xl mx-auto px-6 py-20">
-      <div class="flex items-center justify-between">
-        <h2 class="text-3xl md:text-5xl lg:text-6xl">Let's Build Something</h2>
-        <div class="h-px w-20 bg-black/20"></div>
-      </div>
-      <div class="mt-12 grid md:grid-cols-2 gap-12">
-        <div>
-          <p class="text-black/70">Tell us about your business. We will craft a demo tailored to your market, customers, and growth targets.</p>
-          <div class="mt-6 border border-black/10 rounded-2xl p-6">
-            <p class="text-sm uppercase tracking-[0.2em] text-black/60">Direct Line</p>
-            <p class="text-sm text-black/60 mt-2">We reply within 24 hours.</p>
-          </div>
-        </div>
-        <form id="lead-form" class="space-y-6" action="https://formsubmit.co/588305551bca642219841bfcd3407853" method="post">
-          <input type="hidden" name="_subject" value="New Inter-Root Labs Inquiry" />
-          <input type="hidden" name="_captcha" value="false" />
-          <div>
-            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Name</label>
-            <input type="text" name="name" class="input-underline" />
-            <p class="error-text hidden"></p>
-          </div>
-          <div>
-            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Business Name</label>
-            <input type="text" name="business" class="input-underline" />
-            <p class="error-text hidden"></p>
-          </div>
-          <div>
-            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Business Type</label>
-            <select name="type" class="input-underline">
-              <option value="">Select</option>
-              <option>Gym</option>
-              <option>Restaurant</option>
-              <option>Salon</option>
-              <option>Clinic</option>
-              <option>Other</option>
-            </select>
-            <p class="error-text hidden"></p>
-          </div>
-          <div>
-            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Phone Number</label>
-            <input type="tel" name="phone" class="input-underline" />
-            <p class="error-text hidden"></p>
-          </div>
-          <div>
-            <label class="text-xs uppercase tracking-[0.2em] text-black/60">Message</label>
-            <textarea name="message" rows="3" class="input-underline"></textarea>
-            <p class="error-text hidden"></p>
-          </div>
-          <button type="submit" class="w-full px-6 py-3 bg-[#B8943A] text-[#0F0F0F] uppercase tracking-[0.2em] text-xs rounded-full hover:opacity-90 min-h-[44px]">Send Inquiry</button>
-          <p id="form-success" class="text-sm text-black/70 hidden">Thank you. We will reach out within 24 hours.</p>
-        </form>
-      </div>
-    </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="fade-section">
-    <div class="max-w-6xl mx-auto px-6 py-12">
-      <div class="section-divider">
-        <span class="diamond"></span>
-      </div>
-      <div class="mt-10 grid gap-8 md:grid-cols-3 items-center text-sm uppercase tracking-[0.2em] text-center md:text-left">
-        <div class="flex items-center justify-center md:justify-start gap-3">
-          <img src="images/logo-emblem-light.jpeg" alt="Inter-Root Labs emblem" class="w-10 h-10 rounded-full border border-black/10 object-cover" />
-          <span>Inter-Root Labs</span>
-        </div>
-        <div class="flex items-center justify-center gap-6">
-          <a href="#services" class="hover:text-[#B8943A]">Services</a>
-          <a href="#process" class="hover:text-[#B8943A]">Working</a>
-          <a href="#pricing" class="hover:text-[#B8943A]">Pricing</a>
-        </div>
-        <div class="flex items-center justify-center md:justify-end">Rooted in craft. Built for growth.</div>
-      </div>
-      <div class="mt-8 text-xs uppercase tracking-[0.2em] text-black/50 text-center md:text-left">© 2026 Inter-Root Labs. All rights reserved.</div>
-    </div>
-  </footer>
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  <!-- Mobile Floating Button -->
-<!-- Back To Top Button -->
-<button id="backToTop" aria-label="Back to Top">
-  <span></span>
-</button>
+    <script>
+        // Check for reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-<style>
-  #backToTop {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
+        // --- Alpine Data ---
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('testimonials', () => ({
+                current: 0,
+                items: [
+                    {
+                        image: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=800',
+                        headline: 'A digital presence that finally matches our gravity.',
+                        body: 'Inter-Root Labs delivered a digital presence that finally matches the gravity of our architectural firm. Their commitment to minimalism isn\'t just an aesthetic choice; it\'s a profound understanding of how to frame high-value content without distraction.',
+                        name: 'Marcus Vance',
+                        role: 'Founder, Vance Architecture'
+                    },
+                    {
+                        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800',
+                        headline: 'Uncompromising, fast, and visually arresting.',
+                        body: 'Working with their studio team was a revelation. They stripped away years of convoluted branding to reveal the stark, powerful core of our identity. The resulting platform is uncompromising, fast, and visually arresting.',
+                        name: 'Elena Rostova',
+                        role: 'Director, The Avant Gallery'
+                    }
+                ],
+                next() { this.current = (this.current + 1) % this.items.length; },
+                prev() { this.current = (this.current - 1 + this.items.length) % this.items.length; }
+            }));
+        });
 
-    width: 52px;
-    height: 52px;
+        // --- Custom Cursor ---
+        const cursor = document.getElementById('custom-cursor');
+        let cursorX = window.innerWidth / 2;
+        let cursorY = window.innerHeight / 2;
+        let targetX = cursorX;
+        let targetY = cursorY;
 
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
+        if(!prefersReducedMotion && window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                targetX = e.clientX;
+                targetY = e.clientY;
+                if(cursor.style.opacity == 0) cursor.style.opacity = 1;
+            });
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            const renderCursor = () => {
+                cursorX += (targetX - cursorX) * 0.2;
+                cursorY += (targetY - cursorY) * 0.2;
+                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+                requestAnimationFrame(renderCursor);
+            };
+            requestAnimationFrame(renderCursor);
 
-    background: #000;
+            // Hover effects
+            document.querySelectorAll('[data-cursor]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    const type = el.getAttribute('data-cursor');
+                    if (type === 'hover') {
+                        cursor.style.width = '40px';
+                        cursor.style.height = '40px';
+                        cursor.style.backgroundColor = 'rgba(245, 245, 243, 0.1)';
+                        cursor.style.border = '1px solid #F5F5F3';
+                    } else if (type === 'hover-violet') {
+                        cursor.classList.add('hover-violet');
+                    } else if (type === 'hover-lime') {
+                        cursor.classList.add('hover-lime');
+                    }
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.style.width = '8px';
+                    cursor.style.height = '8px';
+                    cursor.style.backgroundColor = '#F5F5F3';
+                    cursor.style.border = 'none';
+                    cursor.classList.remove('hover-violet', 'hover-lime');
+                });
+            });
+        }
 
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
+        // --- Page Transitions ---
+        document.querySelectorAll('a[href$=".html"]').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = e.currentTarget.href;
+                gsap.to('#page-transition', {
+                    clipPath: 'circle(150% at 50% 50%)',
+                    duration: 0.8,
+                    ease: "power3.inOut",
+                    onComplete: () => { window.location = target; }
+                });
+            });
+        });
 
-    transition: all 0.3s ease;
+        // --- Scramble Animation Helper ---
+        function scrambleText(element, finalValue, duration = 1000) {
+            if(prefersReducedMotion) {
+                element.innerText = finalValue;
+                return;
+            }
+            const chars = "0123456789!@#$%^&*";
+            let startTime = null;
+            const originalText = element.innerText;
+            
+            function update(time) {
+                if (!startTime) startTime = time;
+                const progress = (time - startTime) / duration;
+                
+                if (progress >= 1) {
+                    element.innerText = finalValue;
+                    return;
+                }
+                
+                let currentStr = "";
+                for(let i=0; i<finalValue.length; i++) {
+                    if (Math.random() < progress) {
+                        currentStr += finalValue[i];
+                    } else {
+                        currentStr += chars[Math.floor(Math.random() * chars.length)];
+                    }
+                }
+                element.innerText = currentStr;
+                requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
 
-    z-index: 9999;
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+            Splitting();
 
-    /* Gold Shadow */
-    box-shadow:
-      0 0 10px rgba(255, 215, 0, 0.45),
-      0 0 20px rgba(255, 215, 0, 0.25);
-  }
+            // Smooth Scroll Setup
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smooth: true,
+            });
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => lenis.raf(time * 1000));
+            gsap.ticker.lagSmoothing(0);
 
-  #backToTop.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
+            // Parallax Footer Calculation
+            function updateFooter() {
+                const footer = document.getElementById('footer');
+                const mainContent = document.getElementById('main-content');
+                if (footer && mainContent) {
+                    mainContent.style.marginBottom = footer.offsetHeight + 'px';
+                }
+            }
+            updateFooter();
+            window.addEventListener('resize', updateFooter);
 
-  #backToTop:hover {
-    transform: translateY(-4px) scale(1.05);
+            // --- Loader Sequence ---
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
 
-    box-shadow:
-      0 0 14px rgba(255, 215, 0, 0.7),
-      0 0 28px rgba(255, 215, 0, 0.45);
-  }
+            // Prevent scrolling during load
+            document.body.style.overflow = 'hidden';
 
-  /* Centered Minimal Gold Arrow */
-  #backToTop span {
-    width: 12px;
-    height: 12px;
+            tl.to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" })
+              .to("#loader", { opacity: 0, duration: 0.8, ease: "power4.out" })
+              
+              // Hero Reveal
+              .from(".hero-title .char", { 
+                  y: () => Math.random() * 100 + 50, 
+                  rotation: () => Math.random() * 30 - 15,
+                  opacity: 0, 
+                  stagger: 0.02, 
+                  duration: 1.2, 
+                  ease: "power4.out" 
+              }, "-=0.6")
+              .to("#hero-sub", { opacity: 1, y: 0, duration: 1 }, "+=0.4")
+              .from(".btn-liquid", { opacity: 0, y: 20, duration: 1 }, "<");
 
-    border-top: 2.5px solid rgb(0, 0, 0);
-    border-left: 2.5px solid rgb(0, 0, 0);
+            if(prefersReducedMotion) tl.progress(1);
 
-    transform: rotate(45deg);
+            // --- Scroll Animations ---
 
-    margin-top: 4px;
-  }
+            // Hero Parallax
+            if(!prefersReducedMotion) {
+                gsap.to("#hero-bg", {
+                    yPercent: 30,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ".min-h-screen",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                });
+            }
 
-  /* Dark Mode */
-  @media (prefers-color-scheme: dark) {
-    #backToTop {
-      background: #fff;
-    }
-  }
-</style>
+            // Marquee
+            const marquees = document.querySelectorAll('.marquee-container');
+            marquees.forEach(m => {
+                const track = m.querySelector('.marquee-track');
+                const speed = parseFloat(m.getAttribute('data-speed'));
+                let xPos = 0;
+                
+                function animate() {
+                    xPos -= speed;
+                    if(speed > 0 && xPos <= -50) xPos = 0; 
+                    if(speed < 0 && xPos >= 0) xPos = -50;
+                    track.style.transform = `translateX(${xPos}%)`;
+                    if(!m.isPaused) requestAnimationFrame(animate);
+                }
+                if(!prefersReducedMotion) requestAnimationFrame(animate);
 
-<script>
-  const backToTop = document.getElementById("backToTop");
+                m.addEventListener('mouseenter', () => m.isPaused = true);
+                m.addEventListener('mouseleave', () => {
+                    m.isPaused = false;
+                    if(!prefersReducedMotion) requestAnimationFrame(animate);
+                });
+            });
 
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 300) {
-      backToTop.classList.add("show");
-    } else {
-      backToTop.classList.remove("show");
-    }
-  });
+            // About Reveal
+            gsap.from(".about-line-text", {
+                scrollTrigger: {
+                    trigger: "#about",
+                    start: "top 60%",
+                },
+                y: 30,
+                autoAlpha: 0,
+                duration: 1,
+                stagger: 0.15,
+                ease: "power4.out"
+            });
 
-  backToTop.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-</script>
+            // Process Scramble & Reveal
+            gsap.utils.toArray('.workflow-card').forEach((card, i) => {
+                const num = card.querySelector('.scramble-num');
+                const finalVal = num.getAttribute('data-val');
+                
+                ScrollTrigger.create({
+                    trigger: card,
+                    start: "top 80%",
+                    onEnter: () => scrambleText(num, finalVal, 800)
+                });
 
-  <script src="script.js"></script>
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 85%",
+                    },
+                    y: 50,
+                    opacity: 0,
+                    clipPath: 'inset(100% 0 0 0)',
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+                // Final state for clip-path
+                gsap.to(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    clipPath: 'inset(0% 0 0 0)',
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+            });
+
+        });
+    </script>
 </body>
 </html>

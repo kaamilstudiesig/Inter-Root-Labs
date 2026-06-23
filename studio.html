@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#080808] text-[#F5F5F3] overflow-x-hidden antialiased selection:bg-[#C8FF00] selection:text-[#080808]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio | Inter-Root Labs</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Splitting CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        bebas: ['"Bebas Neue"', 'sans-serif'],
+                        inter: ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            black: '#080808',
+                            white: '#F5F5F3',
+                            violet: '#86BBD8',
+                            lime: '#C8FF00',
+                            'lime-dark': '#A3CC00',
+                            grey1: '#111111',
+                            grey2: '#1C1C1C',
+                            grey3: '#888888',
+                            grey4: '#333333'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body, html {
+            cursor: none;
+            background-color: #080808;
+            color: #F5F5F3;
+        }
+
+        ::-webkit-scrollbar { width: 0px; }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed; top: 0; left: 0; width: 8px; height: 8px;
+            background-color: #F5F5F3; border-radius: 50%; pointer-events: none;
+            z-index: 9999; transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; overflow: hidden;
+        }
+        #custom-cursor.hover-lime {
+            width: 80px; height: 80px; background-color: #C8FF00; mix-blend-mode: normal;
+        }
+
+        /* Grain Overlay */
+        .grain-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: 0.08;
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Page Transition Entrance */
+        #page-entrance {
+            position: fixed; inset: 0; background: #080808; z-index: 99999; pointer-events: none;
+            clip-path: circle(150% at 50% 50%);
+        }
+
+        /* Page Transition Exit */
+        #page-transition {
+            position: fixed; inset: 0; background: #080808; z-index: 99999; pointer-events: none;
+            clip-path: circle(0% at 50% 50%);
+        }
+
+        /* Hero Lime Noise Bleed */
+        .lime-bleed {
+            position: absolute; top: 0; right: 0;
+            width: 80vw; height: 80vh; max-width: 1000px;
+            background: radial-gradient(circle at top right, rgba(200,255,0,0.15) 0%, rgba(200,255,0,0) 70%);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* Bento Grid Card */
+        .bento-card {
+            background: #111111; border: 1px solid #1C1C1C; transition: all 0.4s ease;
+            clip-path: inset(100% 0 0 0); /* For GSAP reveal */
+        }
+        .bento-card:hover {
+            border-color: #C8FF00;
+            box-shadow: 0 0 40px rgba(200,255,0,0.15);
+            background: #151515;
+            transform: scale(1.02);
+            z-index: 30;
+        }
+
+        /* Masonry Portfolio */
+        .masonry-grid {
+            column-count: 1; column-gap: 1.5rem;
+        }
+        @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+        
+        .masonry-item {
+            break-inside: avoid; margin-bottom: 1.5rem; position: relative; overflow: hidden;
+            background: #111;
+        }
+        
+        .masonry-item img {
+            width: 100%; height: auto; filter: grayscale(100%); transition: all 0.5s ease;
+        }
+        
+        .masonry-item:hover img {
+            filter: grayscale(0%); transform: scale(1.05);
+        }
+
+        a { color: inherit; }
+    </style>
+</head>
+<body class="bg-brand-black text-brand-white">
+
+    <div id="custom-cursor"></div>
+    <div class="grain-overlay"></div>
+    <div id="page-entrance"></div>
+    <div id="page-transition"></div>
+
+    <!-- LOADER -->
+    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-8">
+        <div class="relative z-20">
+            <div id="loader-logo-wrap" class="overflow-hidden">
+                <span id="loader-logo" class="font-bebas text-5xl md:text-7xl tracking-[0.2em] text-brand-white translate-y-[100%] block">INTER-ROOT LABS</span>
+            </div>
+        </div>
+        <div class="w-64 h-[2px] bg-brand-grey4 overflow-hidden relative z-10" id="loader-progress-container">
+            <div id="loader-progress" class="absolute top-0 left-0 h-full w-0 bg-brand-white"></div>
+        </div>
+    </div>
+
+    <!-- WRAPPER -->
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <!-- MAIN -->
+            <main id="main-content" class="relative z-10 bg-brand-black flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.5)] pb-0">
+
+                <!-- NAVBAR -->
+                <nav id="navbar" x-data="{ open: false }" class="fixed top-0 w-full flex items-center justify-between px-6 py-5 md:px-12 z-50 text-sm uppercase tracking-widest font-inter text-brand-grey3 transition-colors duration-300">
+                    <div class="flex items-center gap-4 cursor-pointer" data-cursor="hover">
+                        <a href="index.html" class="flex items-center gap-3 hover:text-brand-white transition-colors">
+                            <img src="images/logo-emblem-light.jpeg" class="w-8 h-8 rounded-full object-cover mix-blend-screen" alt="Logo">
+                            <span class="font-bebas font-normal text-[18px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
+                        </a>
+                    </div>
+                    
+                    <div class="hidden md:flex items-center gap-8 font-medium text-[11px]">
+                        <a href="developers.html" class="hover:text-brand-violet transition-colors duration-300" data-cursor="hover-violet">DEVELOPERS</a>
+                        <a href="studio.html" class="text-brand-lime transition-colors duration-300" data-cursor="hover-lime">STUDIO</a>
+                        <a href="index.html#about" class="hover:text-brand-white transition-colors duration-300" data-cursor="hover">ABOUT</a>
+                        <a href="index.html#contact" class="hover:text-brand-white transition-colors duration-300" data-cursor="hover">CONTACT US</a>
+                    </div>
+
+                    <button class="md:hidden z-50 text-brand-white" @click="open = !open" data-cursor="hover">
+                        <span x-show="!open">MENU</span>
+                        <span x-show="open">CLOSE</span>
+                    </button>
+
+                    <div x-show="open" x-transition.opacity.duration.300ms class="fixed inset-0 bg-brand-black/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 text-4xl font-bebas z-40">
+                        <a href="developers.html" class="hover:text-brand-violet transition-colors" data-cursor="hover-violet">DEVELOPERS</a>
+                        <a href="studio.html" class="text-brand-lime transition-colors" data-cursor="hover-lime">STUDIO</a>
+                        <a href="index.html#about" class="hover:text-brand-white transition-colors" data-cursor="hover">ABOUT</a>
+                        <a href="index.html#contact" class="hover:text-brand-white transition-colors" data-cursor="hover">CONTACT US</a>
+                    </div>
+                </nav>
+
+                <!-- HERO -->
+                <section class="min-h-screen w-full relative flex flex-col items-start justify-center overflow-hidden bg-brand-black pt-20 px-6 md:px-12">
+                    <div class="lime-bleed"></div>
+                    <div class="relative z-10 w-full max-w-7xl mx-auto">
+                        <h1 class="hero-title font-bebas text-[11vw] md:text-[9rem] leading-[0.85] uppercase tracking-tight text-brand-white" data-splitting>WE MAKE BRANDS<br>IMPOSSIBLE TO IGNORE.</h1>
+                        <p id="hero-sub" class="font-inter text-brand-grey3 text-lg md:text-2xl mt-8 max-w-2xl font-light opacity-0">Video production and social media management that actually moves people.</p>
+                        <div class="mt-12 opacity-0" id="hero-cta">
+                            <a href="index.html#contact" class="border border-brand-white/30 px-10 py-5 rounded-full font-bebas text-2xl tracking-widest text-brand-white hover:bg-brand-white hover:text-brand-black transition-colors duration-300 inline-block" data-cursor="hover">
+                                BOOK A CALL
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RESULTS / METRICS -->
+                <section class="py-24 px-6 bg-brand-lime text-brand-black border-y border-brand-black">
+                    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                        <div>
+                            <div class="font-bebas text-7xl md:text-9xl tracking-tight mb-2 flex items-center justify-center">
+                                <span class="counter" data-target="50">0</span><span class="text-4xl md:text-6xl mt-4">M+</span>
+                            </div>
+                            <p class="font-inter text-sm font-bold tracking-widest uppercase">Organic Views Generated</p>
+                        </div>
+                        <div>
+                            <div class="font-bebas text-7xl md:text-9xl tracking-tight mb-2 flex items-center justify-center">
+                                <span class="counter" data-target="800">0</span><span class="text-4xl md:text-6xl mt-4">K+</span>
+                            </div>
+                            <p class="font-inter text-sm font-bold tracking-widest uppercase">Followers Grown</p>
+                        </div>
+                        <div>
+                            <div class="font-bebas text-7xl md:text-9xl tracking-tight mb-2 flex items-center justify-center">
+                                <span class="counter" data-target="15">0</span><span class="text-4xl md:text-6xl mt-4">%</span>
+                            </div>
+                            <p class="font-inter text-sm font-bold tracking-widest uppercase">Avg. Engagement Rate</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BENTO SERVICES -->
+                <section class="py-32 px-6 border-b border-brand-grey4/30 relative">
+                    <div class="max-w-7xl mx-auto">
+                        <h2 class="font-bebas text-5xl md:text-7xl mb-16 uppercase tracking-tight text-brand-white">CAPABILITIES</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px]">
+                            <!-- Brand Films -->
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-2 p-10 flex flex-col justify-end relative overflow-hidden cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_film.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-4xl md:text-5xl text-brand-white mb-4 relative z-10">BRAND FILMS</h3>
+                                <p class="font-inter text-brand-grey3 text-lg max-w-md relative z-10">Cinematic storytelling that captures the essence of your business and builds emotional connection with your audience.</p>
+                            </div>
+                            
+                            <!-- Reels -->
+                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_reels.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">REELS & SHORT FORM</h3>
+                                <p class="font-inter text-brand-grey3 text-sm relative z-10">High-retention vertical video engineered for algorithmic reach.</p>
+                            </div>
+
+                            <!-- Social Media -->
+                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_social.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">SOCIAL MANAGEMENT</h3>
+                                <p class="font-inter text-brand-grey3 text-sm relative z-10">End-to-end publishing, community engagement, and growth tactics.</p>
+                            </div>
+
+                            <!-- Campaign -->
+                            <div class="bento-card col-span-1 md:col-span-1 row-span-2 p-10 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_campaign.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-4xl text-brand-white mb-4 relative z-10">CAMPAIGN PRODUCTION</h3>
+                                <p class="font-inter text-brand-grey3 relative z-10">Full-scale ad creatives for paid acquisition channels.</p>
+                            </div>
+
+                            <!-- Graphic Design -->
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_graphic.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">GRAPHIC DESIGN</h3>
+                                <p class="font-inter text-brand-grey3 relative z-10">Thumb-stopping visual assets, carousels, and digital collateral.</p>
+                            </div>
+
+                            <!-- Content Strategy -->
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-lime" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/studio_strategy.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">CONTENT STRATEGY</h3>
+                                <p class="font-inter text-brand-grey3 relative z-10">Data-driven roadmaps to position your brand as an industry authority.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PORTFOLIO GRID -->
+                <section class="py-32 px-6 border-b border-brand-grey4/30">
+                    <div class="max-w-7xl mx-auto">
+                        <div class="flex justify-between items-end mb-16">
+                            <h2 class="font-bebas text-5xl md:text-7xl uppercase tracking-tight text-brand-white">THE VAULT</h2>
+                            <p class="hidden md:block font-inter text-brand-grey3 uppercase tracking-widest text-sm">Selected Visuals</p>
+                        </div>
+                        
+                        <div class="masonry-grid">
+                            <!-- Placeholder images using Unsplash for masonry demo -->
+                            <div class="masonry-item" data-cursor="hover-lime"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800" alt="Work 1"></div>
+                            <div class="masonry-item" data-cursor="hover-lime"><img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?auto=format&fit=crop&q=80&w=800" alt="Work 2"></div>
+                            <div class="masonry-item" data-cursor="hover-lime"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800" alt="Work 3"></div>
+                            <div class="masonry-item" data-cursor="hover-lime"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&q=80&w=800" alt="Work 4"></div>
+                            <div class="masonry-item" data-cursor="hover-lime"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800" alt="Work 5"></div>
+                            <div class="masonry-item" data-cursor="hover-lime"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800" alt="Work 6"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PACKAGES -->
+                <section class="py-32 px-6 border-b border-brand-grey4/30">
+                    <div class="max-w-7xl mx-auto">
+                        <h2 class="font-bebas text-5xl md:text-7xl mb-16 uppercase tracking-tight text-brand-white text-center">MEDIA PACKAGES</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="border border-brand-grey4/50 p-10 hover:border-brand-lime transition-colors duration-300">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2">PRESENCE</h3>
+                                <p class="font-inter text-brand-grey3 mb-8">Establish baseline</p>
+                                <ul class="font-inter text-sm text-brand-grey3 space-y-4">
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>8 High-retention Reels/mo</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>Consistent posting schedule</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>Basic community management</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border border-brand-lime p-10 bg-brand-lime/5 relative">
+                                <div class="absolute top-0 right-0 bg-brand-lime text-brand-black text-xs font-bebas px-3 py-1 tracking-widest">MOST POPULAR</div>
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2">SCALE</h3>
+                                <p class="font-inter text-brand-grey3 mb-8">Performance-driven growth</p>
+                                <ul class="font-inter text-sm text-brand-white space-y-4">
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>15 Premium Reels & Shorts/mo</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>Strategy-led creative direction</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>Deep community engagement</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>Bi-weekly performance reports</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="border border-brand-grey4/50 p-10 hover:border-brand-lime transition-colors duration-300">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2">AUTHORITY</h3>
+                                <p class="font-inter text-brand-grey3 mb-8">Full-funnel dominance</p>
+                                <ul class="font-inter text-sm text-brand-grey3 space-y-4">
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>Cinematic brand film (1-3 min)</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>Paid ad creative cutdowns</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-brand-lime flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>Influencer collaboration strategy</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA -->
+                <section class="py-40 px-6 bg-brand-lime text-center">
+                    <h2 class="font-bebas text-[10vw] md:text-[8rem] leading-[0.85] tracking-tight uppercase text-brand-black mb-12">
+                        READY TO BE SEEN?
+                    </h2>
+                    <a href="index.html#contact" class="inline-block border-2 border-brand-black bg-transparent text-brand-black font-bebas text-2xl tracking-widest px-12 py-5 hover:bg-brand-black hover:text-brand-lime transition-colors duration-300" data-cursor="hover">
+                        BOOK A CALL
+                    </a>
+                </section>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer id="footer" class="fixed bottom-0 left-0 w-full z-0 bg-[#000000] py-12 px-6 h-screen flex flex-col justify-end overflow-hidden">
+                <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between gap-12 relative z-10 pb-4">
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">LOCATION</span>
+                        <p>Bangalore, India</p>
+                        <p>Available Worldwide</p>
+                    </div>
+
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">SOCIAL</span>
+                        <a href="#" class="hover:text-brand-white transition-colors" data-cursor="hover">INSTAGRAM</a>
+                        <a href="#" class="hover:text-brand-white transition-colors" data-cursor="hover">LINKEDIN</a>
+                    </div>
+
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">SAY HELLO</span>
+                        <a href="mailto:hello@inter-root.com" class="hover:text-brand-lime transition-colors" data-cursor="hover">HELLO@INTER-ROOT.COM</a>
+                        <p>+91 999 999 9999</p>
+                    </div>
+                </div>
+                
+                <div class="w-full relative z-10 flex justify-center overflow-hidden">
+                    <span id="footer-wordmark" class="font-bebas text-[18vw] leading-[0.8] text-brand-white whitespace-nowrap tracking-tight translate-y-4">INTER-ROOT LABS</span>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Custom Cursor
+        const cursor = document.getElementById('custom-cursor');
+        let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
+        let targetX = cursorX, targetY = cursorY;
+
+        if(!prefersReducedMotion && window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                targetX = e.clientX; targetY = e.clientY;
+                if(cursor.style.opacity == 0) cursor.style.opacity = 1;
+            });
+
+            const renderCursor = () => {
+                cursorX += (targetX - cursorX) * 0.2; cursorY += (targetY - cursorY) * 0.2;
+                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+                requestAnimationFrame(renderCursor);
+            };
+            requestAnimationFrame(renderCursor);
+
+            document.querySelectorAll('[data-cursor]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    const type = el.getAttribute('data-cursor');
+                    if (type === 'hover') {
+                        cursor.style.width = '40px'; cursor.style.height = '40px';
+                        cursor.style.backgroundColor = 'rgba(245, 245, 243, 0.1)';
+                        cursor.style.border = '1px solid #F5F5F3';
+                    } else if (type === 'hover-lime') {
+                        cursor.classList.add('hover-lime');
+                    }
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.style.width = '8px'; cursor.style.height = '8px';
+                    cursor.style.backgroundColor = '#F5F5F3'; cursor.style.border = 'none';
+                    cursor.classList.remove('hover-lime');
+                });
+            });
+        }
+
+        // Page Transitions Out
+        document.querySelectorAll('a[href$=".html"]').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = e.currentTarget.href;
+                gsap.to('#page-transition', {
+                    clipPath: 'circle(150% at 50% 50%)',
+                    duration: 0.8, ease: "power3.inOut",
+                    onComplete: () => { window.location = target; }
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+            Splitting();
+
+            // Intro Page Transition (shrink black overlay to center)
+            gsap.to('#page-entrance', {
+                clipPath: 'circle(0% at 50% 50%)',
+                duration: 1, ease: "power3.inOut"
+            });
+
+            const lenis = new Lenis({ duration: 1.2, smooth: true });
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => lenis.raf(time * 1000));
+            gsap.ticker.lagSmoothing(0);
+
+            function updateFooter() {
+                const footer = document.getElementById('footer');
+                const mainContent = document.getElementById('main-content');
+                if (footer && mainContent) mainContent.style.marginBottom = footer.offsetHeight + 'px';
+            }
+            updateFooter(); window.addEventListener('resize', updateFooter);
+
+            // Loader
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            document.body.style.overflow = 'hidden';
+
+            tl.to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" })
+              .to("#loader", { opacity: 0, duration: 0.8, ease: "power4.out" })
+              .from(".hero-title .char", { y: 100, opacity: 0, stagger: 0.02, duration: 1, ease: "power4.out" }, "-=0.6")
+              .to("#hero-sub", { opacity: 1, y: 0, duration: 1 }, "+=0.2")
+              .to("#hero-cta", { opacity: 1, y: 0, duration: 1 }, "<");
+              
+            if(prefersReducedMotion) tl.progress(1);
+
+            // Counter Animation
+            if(!prefersReducedMotion) {
+                const counters = document.querySelectorAll('.counter');
+                counters.forEach(counter => {
+                    ScrollTrigger.create({
+                        trigger: counter,
+                        start: "top 90%",
+                        once: true,
+                        onEnter: () => {
+                            const target = +counter.getAttribute('data-target');
+                            gsap.to(counter, {
+                                innerHTML: target,
+                                duration: 2.5,
+                                ease: "power3.out",
+                                snap: { innerHTML: 1 }
+                            });
+                        }
+                    });
+                });
+            }
+
+            // Bento Reveal
+            gsap.utils.toArray('.bento-card').forEach(card => {
+                gsap.to(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    clipPath: 'inset(0% 0 0 0)', duration: 0.8, ease: "power3.out"
+                });
+            });
+
+            // Masonry Reveal
+            gsap.utils.toArray('.masonry-item').forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: { trigger: item, start: "top 90%" },
+                    y: 50, opacity: 0, duration: 0.8, ease: "power3.out"
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

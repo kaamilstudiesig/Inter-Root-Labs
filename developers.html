@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#080808] text-[#F5F5F3] overflow-x-hidden antialiased selection:bg-[#86BBD8] selection:text-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developers | Inter-Root Labs</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Splitting CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        bebas: ['"Bebas Neue"', 'sans-serif'],
+                        inter: ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            black: '#080808',
+                            white: '#F5F5F3',
+                            violet: '#86BBD8',
+                            'violet-light': '#A1CDE6',
+                            lime: '#C8FF00',
+                            grey1: '#111111',
+                            grey2: '#1C1C1C',
+                            grey3: '#888888',
+                            grey4: '#333333'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body, html {
+            cursor: none;
+            background-color: #080808;
+            color: #F5F5F3;
+        }
+
+        ::-webkit-scrollbar { width: 0px; }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed; top: 0; left: 0; width: 8px; height: 8px;
+            background-color: #F5F5F3; border-radius: 50%; pointer-events: none;
+            z-index: 9999; transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; overflow: hidden;
+        }
+        #custom-cursor.hover-violet {
+            width: 80px; height: 80px; background-color: #86BBD8; mix-blend-mode: normal;
+        }
+
+        /* Grain Overlay */
+        .grain-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: 0.08;
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Page Transition Entrance */
+        #page-entrance {
+            position: fixed; inset: 0; background: #080808; z-index: 99999; pointer-events: none;
+            clip-path: circle(150% at 50% 50%); /* Start fully black */
+        }
+
+        /* Page Transition Exit */
+        #page-transition {
+            position: fixed; inset: 0; background: #080808; z-index: 99999; pointer-events: none;
+            clip-path: circle(0% at 50% 50%);
+        }
+
+        /* Hero Blob */
+        .blob {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60vw; height: 60vw; max-width: 800px; max-height: 800px;
+            background: radial-gradient(circle, rgba(134,187,216,0.4) 0%, rgba(134,187,216,0) 70%);
+            filter: blur(80px); opacity: 0.6; z-index: 0; pointer-events: none;
+            animation: float 20s ease-in-out infinite alternate;
+        }
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-45%, -55%) scale(1.1); }
+        }
+
+        /* Bento Grid Card */
+        .bento-card {
+            background: #111111; border: 1px solid #1C1C1C; transition: all 0.4s ease;
+            clip-path: inset(100% 0 0 0); /* For GSAP reveal */
+        }
+        .bento-card:hover {
+            border-color: #86BBD8;
+            box-shadow: 0 0 40px rgba(134,187,216,0.3);
+            background: #151515;
+            transform: scale(1.02);
+            z-index: 30;
+        }
+
+        /* Horizontal Scroll Area */
+        .horizontal-scroll-container { width: 300vw; display: flex; flex-wrap: nowrap; }
+        .case-card { width: 100vw; height: 100vh; padding: 4rem 2rem; display: flex; align-items: center; justify-content: center; }
+        
+        a { color: inherit; }
+    </style>
+</head>
+<body class="bg-brand-black text-brand-white">
+
+    <div id="custom-cursor"></div>
+    <div class="grain-overlay"></div>
+    <div id="page-entrance"></div>
+    <div id="page-transition"></div>
+
+    <!-- LOADER -->
+    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808] pointer-events-none gap-8">
+        <div class="relative z-20">
+            <div id="loader-logo-wrap" class="overflow-hidden">
+                <span id="loader-logo" class="font-bebas text-5xl md:text-7xl tracking-[0.2em] text-brand-white translate-y-[100%] block">INTER-ROOT LABS</span>
+            </div>
+        </div>
+        <div class="w-64 h-[2px] bg-brand-grey4 overflow-hidden relative z-10" id="loader-progress-container">
+            <div id="loader-progress" class="absolute top-0 left-0 h-full w-0 bg-brand-white"></div>
+        </div>
+    </div>
+
+    <!-- WRAPPER -->
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <!-- MAIN -->
+            <main id="main-content" class="relative z-10 bg-brand-black flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.5)] pb-0">
+
+                <!-- NAVBAR -->
+                <nav id="navbar" x-data="{ open: false }" class="fixed top-0 w-full flex items-center justify-between px-6 py-5 md:px-12 z-50 text-sm uppercase tracking-widest font-inter text-brand-grey3 transition-colors duration-300">
+                    <div class="flex items-center gap-4 cursor-pointer" data-cursor="hover">
+                        <a href="index.html" class="flex items-center gap-3 hover:text-brand-white transition-colors">
+                            <img src="images/logo-emblem-light.jpeg" class="w-8 h-8 rounded-full object-cover mix-blend-screen" alt="Logo">
+                            <span class="font-bebas font-normal text-[18px] tracking-[0.2em] text-brand-white pt-1">INTER-ROOT LABS</span>
+                        </a>
+                    </div>
+                    
+                    <div class="hidden md:flex items-center gap-8 font-medium text-[11px]">
+                        <a href="developers.html" class="text-brand-violet transition-colors duration-300" data-cursor="hover-violet">DEVELOPERS</a>
+                        <a href="studio.html" class="hover:text-brand-lime transition-colors duration-300" data-cursor="hover">STUDIO</a>
+                        <a href="index.html#about" class="hover:text-brand-white transition-colors duration-300" data-cursor="hover">ABOUT</a>
+                        <a href="index.html#contact" class="hover:text-brand-white transition-colors duration-300" data-cursor="hover">CONTACT US</a>
+                    </div>
+
+                    <button class="md:hidden z-50 text-brand-white" @click="open = !open" data-cursor="hover">
+                        <span x-show="!open">MENU</span>
+                        <span x-show="open">CLOSE</span>
+                    </button>
+
+                    <div x-show="open" x-transition.opacity.duration.300ms class="fixed inset-0 bg-brand-black/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 text-4xl font-bebas z-40">
+                        <a href="developers.html" class="text-brand-violet transition-colors" data-cursor="hover-violet">DEVELOPERS</a>
+                        <a href="studio.html" class="hover:text-brand-lime transition-colors" data-cursor="hover">STUDIO</a>
+                        <a href="index.html#about" class="hover:text-brand-white transition-colors" data-cursor="hover">ABOUT</a>
+                        <a href="index.html#contact" class="hover:text-brand-white transition-colors" data-cursor="hover">CONTACT US</a>
+                    </div>
+                </nav>
+
+                <!-- HERO -->
+                <section class="min-h-screen w-full relative flex flex-col items-center justify-center overflow-hidden bg-brand-black pt-20">
+                    <div class="blob"></div>
+                    <div class="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
+                        <h1 class="hero-title font-bebas text-[12vw] md:text-[9rem] leading-[0.85] uppercase tracking-tight text-brand-white" data-splitting>WE BUILD THINGS<br>THAT WORK.</h1>
+                        <p id="hero-sub" class="font-inter text-brand-grey3 text-lg md:text-2xl mt-8 max-w-2xl mx-auto font-light opacity-0">Full-stack development for businesses that refuse to be average.</p>
+                        <div class="mt-12 opacity-0" id="hero-cta">
+                            <a href="index.html#contact" class="border border-brand-white/30 px-10 py-5 rounded-full font-bebas text-2xl tracking-widest text-brand-white hover:bg-brand-white hover:text-brand-black transition-colors duration-300 inline-block" data-cursor="hover">
+                                START PROJECT
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BENTO SERVICES -->
+                <section class="py-32 px-6 border-y border-brand-grey4/30 relative">
+                    <div class="max-w-7xl mx-auto">
+                        <h2 class="font-bebas text-5xl md:text-7xl mb-16 uppercase tracking-tight text-brand-white">CAPABILITIES</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px]">
+                            <!-- Web Apps (Large) -->
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-2 p-10 flex flex-col justify-end relative overflow-hidden group cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_web.webp'); background-size: cover; background-position: center;">
+                                <div class="absolute top-8 right-8 text-brand-violet-light opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                                </div>
+                                <h3 class="font-bebas text-4xl md:text-5xl text-brand-white mb-4 relative z-10">WEB APPLICATIONS</h3>
+                                <p class="font-inter text-brand-grey3 text-lg max-w-md relative z-10">High-performance, scalable web platforms built with modern React ecosystems. From SaaS products to enterprise portals.</p>
+                            </div>
+                            
+                            <!-- API -->
+                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_api.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">API INTEGRATIONS</h3>
+                                <p class="font-inter text-brand-grey3 text-sm relative z-10">Connecting fragmented systems into seamless workflows.</p>
+                            </div>
+
+                            <!-- E-commerce -->
+                            <div class="bento-card col-span-1 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_ecommerce.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">E-COMMERCE</h3>
+                                <p class="font-inter text-brand-grey3 text-sm relative z-10">Headless commerce builds optimized for conversion and speed.</p>
+                            </div>
+
+                            <!-- Mobile Apps -->
+                            <div class="bento-card col-span-1 md:col-span-1 row-span-2 p-10 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_mobile.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-4xl text-brand-white mb-4 relative z-10">MOBILE APPS</h3>
+                                <p class="font-inter text-brand-grey3 relative z-10">Native-feeling iOS and Android applications built efficiently.</p>
+                            </div>
+
+                            <!-- QR Ordering -->
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_qr.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">QR ORDERING SYSTEMS</h3>
+                                <p class="font-inter text-brand-grey3 relative z-10">Contactless, real-time dining solutions for modern hospitality.</p>
+                            </div>
+
+                            <!-- Custom Dashboards -->
+                            <div class="bento-card col-span-1 md:col-span-2 row-span-1 p-8 flex flex-col justify-end cursor-pointer" data-cursor="hover-violet" style="background-image: linear-gradient(to top, #111 10%, transparent 100%), url('images/dev_dashboards.webp'); background-size: cover; background-position: center;">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-2 relative z-10">CUSTOM DASHBOARDS</h3>
+                                <p class="font-inter text-brand-grey3 relative z-10">Internal tools that turn complex data into actionable insights.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TECH STACK -->
+                <section class="py-32 px-6 bg-[#0a0a0a]">
+                    <div class="max-w-5xl mx-auto text-center">
+                        <h2 class="font-inter text-sm tracking-[0.3em] text-brand-grey3 mb-16 uppercase">The Stack</h2>
+                        <div class="flex flex-wrap justify-center gap-x-8 gap-y-6 font-bebas text-4xl md:text-6xl text-brand-white">
+                            <span class="tech-item" data-text="REACT">REACT</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="NODE.JS">NODE.JS</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="TYPESCRIPT">TYPESCRIPT</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="POSTGRESQL">POSTGRESQL</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="MONGODB">MONGODB</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="SUPABASE">SUPABASE</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="REACT NATIVE">REACT NATIVE</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="AWS">AWS</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="DOCKER">DOCKER</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="TAILWINDCSS">TAILWINDCSS</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="GRAPHQL">GRAPHQL</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="REDIS">REDIS</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="RAZORPAY">RAZORPAY</span><span class="text-brand-grey4">/</span>
+                            <span class="tech-item" data-text="VERCEL">VERCEL</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CASE STUDIES (Vertical Scroll) -->
+                <section class="py-32 px-6 relative overflow-hidden bg-brand-black" id="case-studies">
+                    <div class="max-w-7xl mx-auto mb-16">
+                        <h2 class="font-bebas text-5xl md:text-7xl text-brand-white tracking-widest uppercase">SELECTED WORKS</h2>
+                    </div>
+                    <div class="max-w-7xl mx-auto flex flex-col gap-32">
+                        <!-- Project 1 -->
+                        <div class="flex flex-col md:flex-row gap-12 items-center">
+                            <div class="w-full md:w-3/5 aspect-video bg-[#111] relative overflow-hidden border border-brand-grey4">
+                                <div class="absolute inset-0 bg-gradient-to-tr from-brand-violet/20 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center font-bebas text-5xl text-brand-grey4">AUTO SHARE</div>
+                            </div>
+                            <div class="w-full md:w-2/5">
+                                <h3 class="font-bebas text-6xl text-brand-white mb-4">AUTO SHARE</h3>
+                                <p class="font-inter text-brand-violet-light text-sm tracking-widest uppercase mb-6">Ride Pooling Platform</p>
+                                <p class="font-inter text-brand-grey3 leading-relaxed mb-8">A comprehensive mobile application connecting students for shared commutes. Real-time matching, route optimization, and split payments integrated seamlessly.</p>
+                                <div class="flex gap-4">
+                                    <span class="px-4 py-1 border border-brand-grey4 text-xs font-inter text-brand-grey3 rounded-full">React Native</span>
+                                    <span class="px-4 py-1 border border-brand-grey4 text-xs font-inter text-brand-grey3 rounded-full">Node.js</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div class="flex flex-col md:flex-row-reverse gap-12 items-center">
+                            <div class="w-full md:w-3/5 aspect-video bg-[#111] relative overflow-hidden border border-brand-grey4">
+                                <div class="absolute inset-0 bg-gradient-to-tr from-brand-violet/20 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center font-bebas text-5xl text-brand-grey4">GOLDKRAFT</div>
+                            </div>
+                            <div class="w-full md:w-2/5 md:text-right flex flex-col md:items-end">
+                                <h3 class="font-bebas text-6xl text-brand-white mb-4">GOLDKRAFT</h3>
+                                <p class="font-inter text-brand-violet-light text-sm tracking-widest uppercase mb-6">E-Commerce Architecture</p>
+                                <p class="font-inter text-brand-grey3 leading-relaxed mb-8">A high-conversion custom storefront optimized for performance and aesthetic presentation of premium products.</p>
+                                <div class="flex gap-4">
+                                    <span class="px-4 py-1 border border-brand-grey4 text-xs font-inter text-brand-grey3 rounded-full">Next.js</span>
+                                    <span class="px-4 py-1 border border-brand-grey4 text-xs font-inter text-brand-grey3 rounded-full">Supabase</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 3 -->
+                        <div class="flex flex-col md:flex-row gap-12 items-center">
+                            <div class="w-full md:w-3/5 aspect-video bg-[#111] relative overflow-hidden border border-brand-grey4">
+                                <div class="absolute inset-0 bg-gradient-to-tr from-brand-violet/20 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center font-bebas text-5xl text-brand-grey4">AARAMBHA</div>
+                            </div>
+                            <div class="w-full md:w-2/5">
+                                <h3 class="font-bebas text-6xl text-brand-white mb-4">AARAMBHA CLINIC</h3>
+                                <p class="font-inter text-brand-violet-light text-sm tracking-widest uppercase mb-6">Patient Portal</p>
+                                <p class="font-inter text-brand-grey3 leading-relaxed mb-8">Digital transformation of clinic operations including automated booking, patient history tracking, and tele-consultation infrastructure.</p>
+                                <div class="flex gap-4">
+                                    <span class="px-4 py-1 border border-brand-grey4 text-xs font-inter text-brand-grey3 rounded-full">React</span>
+                                    <span class="px-4 py-1 border border-brand-grey4 text-xs font-inter text-brand-grey3 rounded-full">PostgreSQL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ENGAGEMENT MODELS -->
+                <section class="py-32 px-6 border-y border-brand-grey4/30">
+                    <div class="max-w-7xl mx-auto">
+                        <h2 class="font-bebas text-5xl md:text-7xl mb-16 uppercase tracking-tight text-brand-white text-center">ENGAGEMENT MODELS</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                            <div class="border border-brand-grey4/50 p-10 hover:border-brand-violet transition-colors duration-300">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-4">PROJECT BASED</h3>
+                                <p class="font-inter text-brand-grey3 mb-8">Clear scope, fixed timeline, and defined deliverables. Best for well-defined products needing end-to-end execution.</p>
+                                <ul class="font-inter text-sm text-brand-grey3 space-y-3">
+                                    <li class="flex items-center gap-3"><span class="text-brand-violet">&rarr;</span> Discovery & Scoping</li>
+                                    <li class="flex items-center gap-3"><span class="text-brand-violet">&rarr;</span> Milestone Deliverables</li>
+                                    <li class="flex items-center gap-3"><span class="text-brand-violet">&rarr;</span> Fixed Budget</li>
+                                </ul>
+                            </div>
+
+                            <div class="border border-brand-grey4/50 p-10 hover:border-brand-violet transition-colors duration-300">
+                                <h3 class="font-bebas text-3xl text-brand-white mb-4">PRODUCT PARTNER</h3>
+                                <p class="font-inter text-brand-grey3 mb-8">We act as your technical co-founder. Deep strategic involvement for non-technical founders with high potential.</p>
+                                <ul class="font-inter text-sm text-brand-grey3 space-y-3">
+                                    <li class="flex items-center gap-3"><span class="text-brand-violet">&rarr;</span> Architecture Strategy</li>
+                                    <li class="flex items-center gap-3"><span class="text-brand-violet">&rarr;</span> Equity + Cash Mix</li>
+                                    <li class="flex items-center gap-3"><span class="text-brand-violet">&rarr;</span> Long-term Alignment</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA -->
+                <section class="py-40 px-6 bg-brand-violet text-center">
+                    <h2 class="font-bebas text-[10vw] md:text-[8rem] leading-[0.85] tracking-tight uppercase text-brand-white mb-12">
+                        READY TO BUILD?
+                    </h2>
+                    <a href="index.html#contact" class="inline-block border-2 border-brand-white bg-transparent text-brand-white font-bebas text-2xl tracking-widest px-12 py-5 hover:bg-brand-white hover:text-brand-violet transition-colors duration-300" data-cursor="hover">
+                        START A PROJECT
+                    </a>
+                </section>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer id="footer" class="fixed bottom-0 left-0 w-full z-0 bg-[#000000] py-12 px-6 h-screen flex flex-col justify-end overflow-hidden">
+                <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between gap-12 relative z-10 pb-4">
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">LOCATION</span>
+                        <p>Bangalore, India</p>
+                        <p>Available Worldwide</p>
+                    </div>
+
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">SOCIAL</span>
+                        <a href="#" class="hover:text-brand-white transition-colors" data-cursor="hover">INSTAGRAM</a>
+                        <a href="#" class="hover:text-brand-white transition-colors" data-cursor="hover">LINKEDIN</a>
+                    </div>
+
+                    <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
+                        <span class="text-brand-white mb-2 font-bebas text-lg">SAY HELLO</span>
+                        <a href="mailto:hello@inter-root.com" class="hover:text-brand-violet transition-colors" data-cursor="hover">HELLO@INTER-ROOT.COM</a>
+                        <p>+91 999 999 9999</p>
+                    </div>
+                </div>
+                
+                <div class="w-full relative z-10 flex justify-center overflow-hidden">
+                    <span id="footer-wordmark" class="font-bebas text-[18vw] leading-[0.8] text-brand-white whitespace-nowrap tracking-tight translate-y-4">INTER-ROOT LABS</span>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Custom Cursor
+        const cursor = document.getElementById('custom-cursor');
+        let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
+        let targetX = cursorX, targetY = cursorY;
+
+        if(!prefersReducedMotion && window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                targetX = e.clientX; targetY = e.clientY;
+                if(cursor.style.opacity == 0) cursor.style.opacity = 1;
+            });
+
+            const renderCursor = () => {
+                cursorX += (targetX - cursorX) * 0.2; cursorY += (targetY - cursorY) * 0.2;
+                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+                requestAnimationFrame(renderCursor);
+            };
+            requestAnimationFrame(renderCursor);
+
+            document.querySelectorAll('[data-cursor]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    const type = el.getAttribute('data-cursor');
+                    if (type === 'hover') {
+                        cursor.style.width = '40px'; cursor.style.height = '40px';
+                        cursor.style.backgroundColor = 'rgba(245, 245, 243, 0.1)';
+                        cursor.style.border = '1px solid #F5F5F3';
+                    } else if (type === 'hover-violet') {
+                        cursor.classList.add('hover-violet');
+                    } else if (type === 'hover-lime') {
+                        cursor.classList.add('hover-lime');
+                    }
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.style.width = '8px'; cursor.style.height = '8px';
+                    cursor.style.backgroundColor = '#F5F5F3'; cursor.style.border = 'none';
+                    cursor.classList.remove('hover-violet', 'hover-lime');
+                });
+            });
+        }
+
+        // Page Transitions Out
+        document.querySelectorAll('a[href$=".html"]').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = e.currentTarget.href;
+                gsap.to('#page-transition', {
+                    clipPath: 'circle(150% at 50% 50%)',
+                    duration: 0.8, ease: "power3.inOut",
+                    onComplete: () => { window.location = target; }
+                });
+            });
+        });
+
+        function scrambleText(element, finalValue, duration = 1000) {
+            if(prefersReducedMotion) { element.innerText = finalValue; return; }
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let startTime = null;
+            function update(time) {
+                if (!startTime) startTime = time;
+                const progress = (time - startTime) / duration;
+                if (progress >= 1) { element.innerText = finalValue; return; }
+                let currentStr = "";
+                for(let i=0; i<finalValue.length; i++) {
+                    if(finalValue[i] === " " || finalValue[i] === "." || finalValue[i] === "/") {
+                        currentStr += finalValue[i];
+                    } else if (Math.random() < progress) {
+                        currentStr += finalValue[i];
+                    } else {
+                        currentStr += chars[Math.floor(Math.random() * chars.length)];
+                    }
+                }
+                element.innerText = currentStr;
+                requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+            Splitting();
+
+            // Intro Page Transition (shrink black overlay to center)
+            gsap.to('#page-entrance', {
+                clipPath: 'circle(0% at 50% 50%)',
+                duration: 1, ease: "power3.inOut"
+            });
+
+            const lenis = new Lenis({ duration: 1.2, smooth: true });
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => lenis.raf(time * 1000));
+            gsap.ticker.lagSmoothing(0);
+
+            function updateFooter() {
+                const footer = document.getElementById('footer');
+                const mainContent = document.getElementById('main-content');
+                if (footer && mainContent) mainContent.style.marginBottom = footer.offsetHeight + 'px';
+            }
+            updateFooter(); window.addEventListener('resize', updateFooter);
+
+            // Loader
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            document.body.style.overflow = 'hidden';
+
+            tl.to("#loader-progress", { width: "100%", duration: 1.5, ease: "power2.inOut" })
+              .to("#loader", { opacity: 0, duration: 0.8, ease: "power4.out" })
+              .from(".hero-title .char", { y: 100, opacity: 0, stagger: 0.02, duration: 1, ease: "power4.out" }, "-=0.6")
+              .to("#hero-sub", { opacity: 1, y: 0, duration: 1 }, "+=0.2")
+              .to("#hero-cta", { opacity: 1, y: 0, duration: 1 }, "<");
+              
+            if(prefersReducedMotion) tl.progress(1);
+
+            // Bento Reveal
+            gsap.utils.toArray('.bento-card').forEach(card => {
+                gsap.to(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    clipPath: 'inset(0% 0 0 0)', duration: 0.8, ease: "power3.out"
+                });
+            });
+
+            // Tech Stack Scramble
+            gsap.utils.toArray('.tech-item').forEach(item => {
+                ScrollTrigger.create({
+                    trigger: item, start: "top 90%",
+                    onEnter: () => scrambleText(item, item.getAttribute('data-text'), 1200)
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
