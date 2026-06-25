@@ -111,6 +111,19 @@
         .horizontal-scroll-container { width: 300vw; display: flex; flex-wrap: nowrap; }
         .case-card { width: 100vw; height: 100vh; padding: 4rem 2rem; display: flex; align-items: center; justify-content: center; }
         
+        /* Marquee */
+        .marquee-container {
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+        .marquee-track {
+            display: flex;
+            flex-shrink: 0;
+            min-width: 100%;
+        }
+
         a { color: inherit; }
     </style>
 </head>
@@ -250,24 +263,49 @@
                 </section>
 
                 <!-- TECH STACK -->
-                <section class="py-32 px-6 bg-[#0a0a0a]">
-                    <div class="max-w-5xl mx-auto text-center">
-                        <h2 class="font-inter text-sm tracking-[0.3em] text-brand-grey3 mb-16 uppercase">The Stack</h2>
-                        <div class="flex flex-wrap justify-center gap-x-8 gap-y-6 font-bebas text-4xl md:text-6xl text-brand-white">
-                            <span class="tech-item" data-text="REACT">REACT</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="NODE.JS">NODE.JS</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="TYPESCRIPT">TYPESCRIPT</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="POSTGRESQL">POSTGRESQL</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="MONGODB">MONGODB</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="SUPABASE">SUPABASE</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="REACT NATIVE">REACT NATIVE</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="AWS">AWS</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="DOCKER">DOCKER</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="TAILWINDCSS">TAILWINDCSS</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="GRAPHQL">GRAPHQL</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="REDIS">REDIS</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="RAZORPAY">RAZORPAY</span><span class="text-brand-grey4">/</span>
-                            <span class="tech-item" data-text="VERCEL">VERCEL</span>
+                <section class="py-16 sm:py-32 bg-[#0a0a0a] relative overflow-hidden flex flex-col gap-2">
+                    <div class="max-w-5xl mx-auto text-center w-full mb-8 sm:mb-16 px-6">
+                        <h2 class="font-inter text-sm tracking-[0.3em] text-brand-grey3 uppercase">The Stack</h2>
+                    </div>
+                    
+                    <!-- Top Row -->
+                    <div class="marquee-container" data-speed="0.08">
+                        <div class="marquee-track font-bebas text-4xl md:text-6xl tracking-[0.1em] uppercase">
+                            <span class="mx-6 text-brand-white">REACT</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">NODE.JS</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">TYPESCRIPT</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">POSTGRESQL</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">MONGODB</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">SUPABASE</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">REACT NATIVE</span><span class="mx-6 text-brand-grey4">/</span>
+                            <!-- Duplicates for seamless loop -->
+                            <span class="mx-6 text-brand-white">REACT</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">NODE.JS</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">TYPESCRIPT</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">POSTGRESQL</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">MONGODB</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">SUPABASE</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">REACT NATIVE</span><span class="mx-6 text-brand-grey4">/</span>
+                        </div>
+                    </div>
+                    <!-- Bottom Row (Reverse) -->
+                    <div class="marquee-container" data-speed="-0.1">
+                        <div class="marquee-track font-bebas text-4xl md:text-6xl tracking-[0.1em] uppercase">
+                            <span class="mx-6 text-brand-white">AWS</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">DOCKER</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">TAILWINDCSS</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">GRAPHQL</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">REDIS</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">RAZORPAY</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">VERCEL</span><span class="mx-6 text-brand-grey4">/</span>
+                            <!-- Duplicates -->
+                            <span class="mx-6 text-brand-white">AWS</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">DOCKER</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">TAILWINDCSS</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">GRAPHQL</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">REDIS</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">RAZORPAY</span><span class="mx-6 text-brand-grey4">/</span>
+                            <span class="mx-6 text-brand-white">VERCEL</span><span class="mx-6 text-brand-grey4">/</span>
                         </div>
                     </div>
                 </section>
@@ -536,11 +574,26 @@
                 });
             });
 
-            // Tech Stack — clean fade-in stagger (replaces scramble)
-            gsap.utils.toArray('.tech-item').forEach((item, i) => {
-                gsap.from(item, {
-                    scrollTrigger: { trigger: item, start: "top 90%" },
-                    opacity: 0, y: 20, duration: 0.6, delay: i * 0.06, ease: "power3.out"
+            // Marquee
+            const marquees = document.querySelectorAll('.marquee-container');
+            marquees.forEach(m => {
+                const track = m.querySelector('.marquee-track');
+                const speed = parseFloat(m.getAttribute('data-speed'));
+                let xPos = 0;
+                
+                function animate() {
+                    xPos -= speed;
+                    if(speed > 0 && xPos <= -50) xPos = 0; 
+                    if(speed < 0 && xPos >= 0) xPos = -50;
+                    track.style.transform = `translateX(${xPos}%)`;
+                    if(!m.isPaused) requestAnimationFrame(animate);
+                }
+                if(!prefersReducedMotion) requestAnimationFrame(animate);
+
+                m.addEventListener('mouseenter', () => m.isPaused = true);
+                m.addEventListener('mouseleave', () => {
+                    m.isPaused = false;
+                    if(!prefersReducedMotion) requestAnimationFrame(animate);
                 });
             });
 

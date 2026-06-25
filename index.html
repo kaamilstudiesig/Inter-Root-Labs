@@ -237,6 +237,27 @@
         }
 
         a { color: inherit; }
+
+        /* Instruction 1: Prevent horizontal overflow */
+        html, body {
+          overflow-x: hidden;
+          max-width: 100vw;
+        }
+
+        /* Instruction 18: Disable hover transforms on touch devices */
+        @media (hover: none) {
+          .hover\:scale-105,
+          .hover\:-translate-y-2,
+          .hover\:scale-\[1\.03\] {
+            transform: none !important;
+          }
+        }
+
+        /* Instruction 21: Text wrapping in narrow containers */
+        h1, h2, h3 {
+          overflow-wrap: break-word;
+          word-break: break-word;
+        }
     </style>
 </head>
 <body class="bg-brand-black text-brand-white">
@@ -269,7 +290,7 @@
             <main id="main-content" class="relative z-10 bg-brand-black flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.5)] pb-0">
 
                 <!-- NAVBAR -->
-                <nav id="navbar" x-data="{ open: false }" class="fixed top-0 w-full flex items-center justify-between px-6 py-5 md:px-12 z-50 text-sm uppercase tracking-widest font-inter text-brand-grey3 transition-colors duration-300">
+                <nav id="navbar" x-data="{ open: false }" class="fixed top-0 w-full flex items-center justify-between px-4 sm:px-6 py-5 md:px-12 z-50 text-sm uppercase tracking-widest font-inter text-brand-grey3 transition-colors duration-300 relative">
                     <!-- Left -->
                     <div class="flex items-center gap-4 cursor-pointer" data-cursor="hover" onclick="window.scrollTo(0,0)">
                         <img src="images/logo-emblem-dark.jpeg" class="w-9 h-9 rounded-full object-cover" alt="Logo">
@@ -277,7 +298,7 @@
                     </div>
                     
                     <!-- Right -->
-                    <div class="hidden md:flex items-center gap-10 font-medium text-[13px]">
+                    <div class="hidden lg:flex items-center gap-10 font-medium text-[13px]">
                         <a href="developers.html" class="hover:text-brand-violet hover:scale-110 transition-all duration-300" data-cursor="hover-violet">DEVELOPERS</a>
                         <a href="studio.html" class="hover:text-brand-lime hover:scale-110 transition-all duration-300" data-cursor="hover-lime">STUDIO</a>
                         <a href="#about" class="hover:text-brand-white hover:scale-110 transition-all duration-300" data-cursor="hover">ABOUT</a>
@@ -285,13 +306,13 @@
                     </div>
 
                     <!-- Mobile Toggle -->
-                    <button class="md:hidden z-50 text-brand-white" @click="open = !open" data-cursor="hover">
+                    <button class="lg:hidden z-50 text-brand-white" @click="open = !open" data-cursor="hover">
                         <span x-show="!open">MENU</span>
                         <span x-show="open">CLOSE</span>
                     </button>
 
                     <!-- Mobile Nav -->
-                    <div x-show="open" x-transition.opacity.duration.300ms class="fixed inset-0 bg-brand-black/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 text-4xl font-bebas z-40">
+                    <div x-show="open" x-transition.opacity.duration.300ms class="fixed inset-0 bg-brand-black/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 text-4xl font-bebas z-40 lg:hidden">
                         <a href="developers.html" class="hover:text-brand-violet transition-colors" data-cursor="hover-violet">DEVELOPERS</a>
                         <a href="studio.html" class="hover:text-brand-lime transition-colors" data-cursor="hover-lime">STUDIO</a>
                         <a href="#about" @click="open=false" class="hover:text-brand-white transition-colors" data-cursor="hover">ABOUT</a>
@@ -300,21 +321,21 @@
                 </nav>
 
                 <!-- HERO -->
-                <section class="min-h-screen w-full relative flex flex-col items-center justify-center overflow-hidden bg-brand-black">
+                <section class="min-h-[80vh] sm:min-h-[85vh] lg:min-h-screen w-full relative flex flex-col items-center justify-center overflow-hidden bg-brand-black">
                     <!-- Parallax Background -->
                     <div id="hero-bg" class="absolute inset-0 w-full h-full">
                         <img src="image_6.jpeg" class="w-full h-full object-cover opacity-40 mix-blend-luminosity scale-110" alt="Background Texture" />
                         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/50 to-brand-black"></div>
                     </div>
                     
-                    <div class="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col items-start mt-20">
+                    <div class="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 flex flex-col items-start mt-20">
                         <h1 id="hero-title" class="font-bebas text-[14vw] md:text-[13vw] leading-[0.85] uppercase tracking-tight text-brand-white break-words" data-splitting>ENGRAVE YOUR<br>PRESENCE</h1>
                         
                         <div class="flex flex-col items-end w-full mt-12 gap-8 text-right">
-                            <p id="hero-sub" class="font-inter text-brand-grey3 text-xl md:text-3xl uppercase tracking-[0.2em] max-w-xl opacity-0">
+                            <p id="hero-sub" class="font-inter text-brand-grey3 text-base sm:text-lg lg:text-xl md:text-3xl uppercase tracking-[0.2em] max-w-xl opacity-0">
                                 Shaping how brands look, speak, and exist
                             </p>
-                            <a href="#contact" class="btn-liquid border border-brand-white/30 px-10 py-5 rounded-full font-bebas text-2xl tracking-widest text-brand-white overflow-hidden" data-cursor="hover">
+                            <a href="#contact" class="btn-liquid border border-brand-white/30 px-6 sm:px-10 py-3 sm:py-5 rounded-full font-bebas text-2xl tracking-widest text-brand-white overflow-hidden min-h-[44px] text-center" data-cursor="hover">
                                 <span>LEVEL UP NOW</span>
                             </a>
                         </div>
@@ -322,7 +343,7 @@
                 </section>
 
                 <!-- MARQUEE -->
-                <section class="py-6 border-y border-brand-grey4/30 bg-brand-grey1 relative overflow-hidden flex flex-col gap-2">
+                <section class="py-6 border-y border-brand-grey4/30 bg-brand-grey1 relative overflow-hidden flex flex-col gap-2 px-0">
                     <!-- Top Row -->
                     <div class="marquee-container" data-speed="0.08">
                         <div class="marquee-track font-bebas text-3xl md:text-4xl tracking-[0.1em] uppercase">
@@ -358,7 +379,7 @@
                 </section>
 
                 <!-- ABOUT -->
-                <section id="about" class="py-32 md:py-48 px-6 md:px-12 relative overflow-hidden bg-brand-black">
+                <section id="about" class="py-16 sm:py-32 md:py-48 px-4 sm:px-6 md:px-12 relative overflow-hidden bg-brand-black">
                     <!-- Watermark -->
                     <div class="about-watermark absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none opacity-0 select-none flex items-center justify-center">
                         <span class="font-bebas text-[30vw] leading-none whitespace-nowrap">ABOUT US</span>
@@ -366,8 +387,8 @@
 
                     <!-- Accent line that grows on scroll -->
                     <div class="max-w-[1000px] mx-auto relative z-10 flex">
-                        <div class="about-accent-line w-[2px] bg-brand-violet mr-8 md:mr-16 flex-shrink-0" style="height: 0; opacity: 0;"></div>
-                        <div class="font-inter font-light text-2xl md:text-4xl lg:text-5xl text-brand-white leading-[1.4] tracking-tight about-text-container">
+                        <div class="about-accent-line w-[2px] bg-brand-violet mr-4 sm:mr-8 md:mr-16 flex-shrink-0" style="height: 0; opacity: 0;"></div>
+                        <div class="font-inter font-light text-xl sm:text-2xl md:text-4xl lg:text-5xl text-brand-white leading-[1.4] tracking-tight about-text-container">
                             <div class="about-line-text" style="opacity:0; transform: translateY(40px) translateX(-20px);">We combine full-stack development</div>
                             <div class="about-line-text text-brand-grey3" style="opacity:0; transform: translateY(40px) translateX(-20px);">and professional media production</div>
                             <div class="about-line-text" style="opacity:0; transform: translateY(40px) translateX(-20px);">into one seamless ecosystem,</div>
@@ -378,8 +399,8 @@
                 </section>
 
                 <!-- EXPLORE TITLE -->
-                <section class="w-full bg-brand-black py-16 flex items-center justify-center border-t border-brand-grey4/30">
-                    <h2 class="font-bebas text-5xl md:text-7xl text-brand-white tracking-widest uppercase">EXPLORE</h2>
+                <section class="w-full bg-brand-black py-16 flex items-center justify-center border-t border-brand-grey4/30 px-4 sm:px-6">
+                    <h2 class="font-bebas text-4xl sm:text-5xl md:text-7xl text-brand-white tracking-widest uppercase">EXPLORE</h2>
                 </section>
 
                 <!-- PROJECTS SPLIT -->
@@ -408,51 +429,51 @@
                 </section>
 
                 <!-- PROCESS -->
-                <section class="bg-brand-black py-32 px-6 border-b border-brand-grey4/30">
-                    <div class="max-w-[800px] mx-auto text-center mb-24">
+                <section class="bg-brand-black py-16 sm:py-24 lg:py-32 px-4 sm:px-6 border-b border-brand-grey4/30">
+                    <div class="max-w-[800px] mx-auto text-center mb-12 sm:mb-24">
                         <h3 class="font-inter font-medium text-[12px] tracking-[0.2em] text-brand-grey3 uppercase mb-6">THE PROCESS</h3>
-                        <p class="font-inter text-brand-white text-xl md:text-2xl leading-[1.6] font-light">The process is built to move from clarity to execution without unnecessary back and forth.</p>
+                        <p class="font-inter text-brand-white text-base sm:text-xl md:text-2xl leading-[1.6] font-light">The process is built to move from clarity to execution without unnecessary back and forth.</p>
                     </div>
 
                     <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-brand-grey4/30 border border-brand-grey4/30 process-grid p-[1px]">
                         
                         <!-- 01 DISCOVERY -->
-                        <div class="workflow-card bg-brand-black p-12 md:p-16 flex flex-col justify-between min-h-[400px] group transition-colors duration-500 hover:border-brand-violet hover:bg-brand-grey1 border border-transparent">
+                        <div class="workflow-card bg-brand-black p-6 sm:p-12 md:p-16 flex flex-col justify-between min-h-[300px] sm:min-h-[400px] group transition-colors duration-500 hover:border-brand-violet hover:bg-brand-grey1 border border-transparent">
                             <div class="font-bebas text-brand-grey4 text-5xl mb-12 scramble-num" data-val="01">00</div>
                             <div>
                                 <h2 class="font-bebas text-5xl text-brand-white uppercase tracking-tight mb-6">DISCOVERY</h2>
                                 <div class="w-[40px] h-[2px] bg-brand-violet mb-6 group-hover:w-[80px] transition-all duration-500"></div>
-                                <p class="font-inter text-brand-grey3 text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We begin by understanding your business, your audience, and the gap between where you are and where you need to be.</p>
+                                <p class="font-inter text-brand-grey3 text-sm sm:text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We begin by understanding your business, your audience, and the gap between where you are and where you need to be.</p>
                             </div>
                         </div>
 
                         <!-- 02 CONCEPT -->
-                        <div class="workflow-card bg-brand-black p-12 md:p-16 flex flex-col justify-between min-h-[400px] group transition-colors duration-500 hover:border-brand-lime hover:bg-brand-grey1 border border-transparent">
+                        <div class="workflow-card bg-brand-black p-6 sm:p-12 md:p-16 flex flex-col justify-between min-h-[300px] sm:min-h-[400px] group transition-colors duration-500 hover:border-brand-lime hover:bg-brand-grey1 border border-transparent">
                             <div class="font-bebas text-brand-grey4 text-5xl mb-12 scramble-num" data-val="02">00</div>
                             <div>
                                 <h2 class="font-bebas text-5xl text-brand-white uppercase tracking-tight mb-6">CONCEPT</h2>
                                 <div class="w-[40px] h-[2px] bg-brand-lime mb-6 group-hover:w-[80px] transition-all duration-500"></div>
-                                <p class="font-inter text-brand-grey3 text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We translate the findings into a creative direction — defining the voice, visual language, and structure.</p>
+                                <p class="font-inter text-brand-grey3 text-sm sm:text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We translate the findings into a creative direction — defining the voice, visual language, and structure.</p>
                             </div>
                         </div>
 
                         <!-- 03 EXECUTION -->
-                        <div class="workflow-card bg-brand-black p-12 md:p-16 flex flex-col justify-between min-h-[400px] group transition-colors duration-500 hover:border-brand-violet hover:bg-brand-grey1 border border-transparent">
+                        <div class="workflow-card bg-brand-black p-6 sm:p-12 md:p-16 flex flex-col justify-between min-h-[300px] sm:min-h-[400px] group transition-colors duration-500 hover:border-brand-violet hover:bg-brand-grey1 border border-transparent">
                             <div class="font-bebas text-brand-grey4 text-5xl mb-12 scramble-num" data-val="03">00</div>
                             <div>
                                 <h2 class="font-bebas text-5xl text-brand-white uppercase tracking-tight mb-6">EXECUTION</h2>
                                 <div class="w-[40px] h-[2px] bg-brand-violet mb-6 group-hover:w-[80px] transition-all duration-500"></div>
-                                <p class="font-inter text-brand-grey3 text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">The concept is built into reality. Development, design, and content production happen in tight coordination.</p>
+                                <p class="font-inter text-brand-grey3 text-sm sm:text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">The concept is built into reality. Development, design, and content production happen in tight coordination.</p>
                             </div>
                         </div>
 
                         <!-- 04 LAUNCH -->
-                        <div class="workflow-card bg-brand-black p-12 md:p-16 flex flex-col justify-between min-h-[400px] group transition-colors duration-500 hover:border-brand-lime hover:bg-brand-grey1 border border-transparent">
+                        <div class="workflow-card bg-brand-black p-6 sm:p-12 md:p-16 flex flex-col justify-between min-h-[300px] sm:min-h-[400px] group transition-colors duration-500 hover:border-brand-lime hover:bg-brand-grey1 border border-transparent">
                             <div class="font-bebas text-brand-grey4 text-5xl mb-12 scramble-num" data-val="04">00</div>
                             <div>
                                 <h2 class="font-bebas text-5xl text-brand-white uppercase tracking-tight mb-6">LAUNCH</h2>
                                 <div class="w-[40px] h-[2px] bg-brand-lime mb-6 group-hover:w-[80px] transition-all duration-500"></div>
-                                <p class="font-inter text-brand-grey3 text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We deploy, publish, and hand over a system that is ready to scale — an operational foundation.</p>
+                                <p class="font-inter text-brand-grey3 text-sm sm:text-lg leading-relaxed font-light group-hover:text-brand-white transition-colors duration-300">We deploy, publish, and hand over a system that is ready to scale — an operational foundation.</p>
                             </div>
                         </div>
 
@@ -460,11 +481,11 @@
                 </section>
 
                 <!-- TESTIMONIALS -->
-                <section class="bg-[#111111] py-32 px-6 overflow-hidden relative border-b border-brand-grey4/30">
+                <section class="bg-[#111111] py-16 sm:py-24 lg:py-32 px-4 sm:px-6 overflow-hidden relative border-b border-brand-grey4/30">
                     <div class="absolute inset-0 grain-overlay"></div>
                     
                     <div class="max-w-7xl mx-auto" x-data="testimonials()">
-                        <div class="flex flex-col md:flex-row items-center gap-16 md:gap-24 relative z-10">
+                        <div class="flex flex-col md:flex-row items-center gap-8 sm:gap-16 md:gap-24 relative z-10">
                             
                             <!-- Image Left -->
                             <div class="w-full md:w-1/3 flex-shrink-0 relative aspect-[3/4] overflow-hidden rounded-sm" data-cursor="hover">
@@ -480,8 +501,8 @@
                             </div>
 
                             <!-- Content Right -->
-                            <div class="w-full md:w-2/3 relative min-h-[400px] flex flex-col justify-center">
-                                <h2 class="font-bebas text-4xl md:text-6xl uppercase tracking-tight text-brand-white mb-16">WORDS FROM THE PEOPLE WE'VE BUILT FOR</h2>
+                            <div class="w-full md:w-2/3 relative min-h-[280px] sm:min-h-[400px] flex flex-col justify-center">
+                                <h2 class="font-bebas text-3xl sm:text-4xl md:text-6xl uppercase tracking-tight text-brand-white mb-8 sm:mb-16">WORDS FROM THE PEOPLE WE'VE BUILT FOR</h2>
                                 
                                 <div class="relative w-full">
                                     <div class="absolute -top-16 -left-8 text-[12rem] font-bebas text-brand-violet/20 leading-none select-none pointer-events-none z-0">"</div>
@@ -496,15 +517,15 @@
                                              x-transition:leave-start="opacity-100 translate-y-0"
                                              x-transition:leave-end="opacity-0 -translate-y-4">
                                             
-                                            <h3 class="font-inter font-light italic text-2xl md:text-3xl text-brand-white mb-8 leading-tight" x-text="item.headline"></h3>
+                                            <h3 class="font-inter font-light italic text-lg sm:text-2xl md:text-3xl text-brand-white mb-8 leading-tight" x-text="item.headline"></h3>
                                             
                                             <div class="h-[1px] w-12 mb-8" :class="index % 2 === 0 ? 'bg-brand-violet' : 'bg-brand-lime'"></div>
                                             
-                                            <p class="font-inter text-brand-grey3 text-lg leading-relaxed mb-10 max-w-2xl" x-text="item.body"></p>
+                                            <p class="font-inter text-brand-grey3 text-sm sm:text-lg leading-relaxed mb-10 max-w-2xl" x-text="item.body"></p>
                                             
                                             <div>
-                                                <p class="font-bebas text-brand-white text-2xl tracking-widest" x-text="item.name"></p>
-                                                <p class="font-inter text-brand-grey3 text-sm mt-1" x-text="item.role"></p>
+                                                <p class="font-bebas text-brand-white text-xl sm:text-2xl tracking-widest" x-text="item.name"></p>
+                                                <p class="font-inter text-brand-grey3 text-xs sm:text-sm mt-1" x-text="item.role"></p>
                                             </div>
                                         </div>
                                     </template>
@@ -525,22 +546,22 @@
                 </section>
 
                 <!-- CONTACT FORM -->
-                <section id="contact" class="bg-[#EBEBEB] py-32 px-6 border-b border-brand-grey4/30">
-                    <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-20">
+                <section id="contact" class="bg-[#EBEBEB] py-16 sm:py-24 lg:py-32 px-4 sm:px-6 border-b border-brand-grey4/30">
+                    <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 sm:gap-20">
                         <div class="w-full md:w-1/2">
                             <h2 class="font-bebas text-[12vw] md:text-[8rem] leading-[0.85] tracking-tight uppercase text-brand-black mb-8">
                                 HAVE A<br/>PROJECT<br/>IN MIND?
                             </h2>
-                            <p class="font-inter text-[#555555] text-lg max-w-sm font-light">If you seek a digital product built with uncompromising precision, submit your inquiry.</p>
+                            <p class="font-inter text-[#555555] text-sm sm:text-lg max-w-sm font-light">If you seek a digital product built with uncompromising precision, submit your inquiry.</p>
                         </div>
                         
                         <div class="w-full md:w-1/2 pt-4">
-                            <form id="contact-form" class="flex flex-col gap-10" onsubmit="event.preventDefault();">
+                            <form id="contact-form" class="flex flex-col gap-6 sm:gap-10" onsubmit="event.preventDefault();">
                                 
                                 <!-- Service Selector -->
                                 <div class="flex flex-col gap-4 mb-4">
                                     <label class="font-bebas text-sm text-[#555555] tracking-[0.1em]">I NEED HELP WITH:</label>
-                                    <div class="flex flex-wrap gap-4">
+                                    <div class="flex flex-wrap gap-2 sm:gap-4">
                                         <label class="cursor-pointer group relative">
                                             <input type="radio" name="service" value="development" class="peer sr-only service-radio" checked>
                                             <div class="px-6 py-3 border border-[#cccccc] text-[#555555] font-inter text-sm transition-all peer-checked:border-brand-violet peer-checked:text-brand-violet peer-checked:bg-brand-violet/10 hover:border-[#888]">Development</div>
@@ -574,7 +595,7 @@
                                     <div class="input-underline"></div>
                                 </div>
 
-                                <button id="submit-btn" type="submit" class="w-full bg-brand-black text-brand-white border border-brand-black rounded-sm font-bebas text-2xl tracking-widest py-6 mt-4 transition-colors duration-400 group overflow-hidden relative" data-cursor="hover" style="--hover-bg: #86BBD8; --hover-border: #86BBD8;">
+                                <button id="submit-btn" type="submit" class="w-full bg-brand-black text-brand-white border border-brand-black rounded-sm font-bebas text-xl sm:text-2xl tracking-widest py-4 sm:py-6 mt-4 transition-colors duration-400 group overflow-hidden relative min-h-[44px]" data-cursor="hover" style="--hover-bg: #86BBD8; --hover-border: #86BBD8;">
                                     <span class="relative z-10 block transition-transform duration-300 group-hover:-translate-y-[150%]">SUBMIT INQUIRY</span>
                                     <span class="absolute inset-0 z-10 flex items-center justify-center translate-y-[150%] transition-transform duration-300 group-hover:translate-y-0 text-brand-white">SUBMIT INQUIRY</span>
                                 </button>
@@ -586,8 +607,8 @@
             </main>
 
             <!-- FOOTER -->
-            <footer id="footer" class="fixed bottom-0 left-0 w-full z-0 bg-[#000000] py-12 px-6 h-screen flex flex-col justify-end overflow-hidden">
-                <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between gap-12 relative z-10 pb-4">
+            <footer id="footer" class="fixed bottom-0 left-0 w-full z-0 bg-[#000000] py-8 sm:py-12 px-4 sm:px-6 h-screen flex flex-col justify-end overflow-hidden">
+                <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between gap-8 sm:gap-12 relative z-10 pb-4">
                     <div class="flex flex-col gap-2 font-inter text-xs font-medium uppercase tracking-[0.2em] text-brand-grey3">
                         <span class="text-brand-white mb-2 font-bebas text-lg">LOCATION</span>
                         <p>Bangalore, India</p>
@@ -912,6 +933,27 @@
                 });
             }
 
+        });
+
+        // Instruction 16: Close mobile menu when a link inside it is clicked
+        document.addEventListener('click', function(e) {
+          var link = e.target.closest('#navbar div[x-show] a');
+          if (link) {
+            var nav = document.getElementById('navbar');
+            if (nav && nav.__x) {
+              nav.__x.$data.open = false;
+            }
+          }
+        });
+
+        // Instruction 17: Close mobile menu if window resized to desktop
+        window.addEventListener('resize', function() {
+          if (window.innerWidth >= 1024) {
+            var nav = document.getElementById('navbar');
+            if (nav && nav.__x) {
+              nav.__x.$data.open = false;
+            }
+          }
         });
     </script>
 </body>
